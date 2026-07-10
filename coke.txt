@@ -1,0 +1,1 @@
+make the navbar more good and also uasd the logo from he public folder and also take the website name from the logo and also update the meta data of website too and favicon too so make that 
