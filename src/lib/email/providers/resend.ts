@@ -1,11 +1,12 @@
 import { Resend } from "resend";
 
 export const getResendClient = () => {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) {
-    console.warn("RESEND_API_KEY is not set. Emails will not be sent.");
+    console.error("RESEND_API_KEY is missing from environment variables.");
+    throw new Error("RESEND_API_KEY is missing. Please add it to your Vercel Environment Variables.");
   }
-  return new Resend(apiKey || "dummy_key");
+  return new Resend(apiKey);
 };
 
 export const getSenderEmail = () => {
