@@ -19,17 +19,18 @@ export const PasswordReset = ({ resetLink = "https://sarkarilink.com/reset" }: P
   return (
     <Html>
       <Head />
-      <Preview>Reset your Shivyam Password</Preview>
+      <Preview>Reset your SHIVYAM Password</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
-            <Text style={logo}>Shivyam</Text>
+            <Text style={logo}>SHIVYAM</Text>
+            <Text style={subLogo}>Management Services</Text>
           </Section>
           
           <Section style={contentBox}>
             <Heading style={heading}>Reset your password</Heading>
             <Text style={text}>
-              Someone recently requested a password change for your Shivyam account. If this was you, you can set a new password here:
+              Someone recently requested a password change for your SHIVYAM Management Services account. If this was you, you can set a new password here:
             </Text>
             
             <Section style={buttonContainer}>
@@ -45,7 +46,7 @@ export const PasswordReset = ({ resetLink = "https://sarkarilink.com/reset" }: P
           
           <Section style={footer}>
             <Text style={footerText}>
-              &copy; {new Date().getFullYear()} Shivyam. All rights reserved.
+              &copy; {new Date().getFullYear()} SHIVYAM Management Services. All rights reserved.
             </Text>
           </Section>
         </Container>
@@ -73,7 +74,7 @@ const container = {
 };
 
 const header = {
-  backgroundColor: "#2563eb", 
+  backgroundColor: "#0B1B3D", 
   padding: "24px",
   textAlign: "center" as const,
   borderBottom: "2px solid #000000",
@@ -85,6 +86,15 @@ const logo = {
   fontWeight: "800",
   margin: "0",
   letterSpacing: "-0.5px",
+};
+
+const subLogo = {
+  color: "#C5A059", 
+  fontSize: "12px",
+  fontWeight: "600",
+  margin: "4px 0 0",
+  textTransform: "uppercase" as const,
+  letterSpacing: "2px",
 };
 
 const contentBox = {
@@ -113,7 +123,7 @@ const buttonContainer = {
 };
 
 const button = {
-  backgroundColor: "#000000",
+  backgroundColor: "#C5A059",
   color: "#ffffff",
   fontWeight: "800",
   padding: "12px 32px",

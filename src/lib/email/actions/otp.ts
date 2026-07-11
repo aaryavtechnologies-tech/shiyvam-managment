@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient, createAdminClient } from "@/lib/supabase/server";
-import { resend, SENDER_EMAIL } from "@/lib/email/providers/resend";
+import { getResendClient, getSenderEmail } from "@/lib/email/providers/resend";
 import { generateOTP, hashOTP, verifyOTPHash } from "@/lib/email/otp/crypto";
 import { logEmailError } from "@/lib/email/utils/logger";
 import VerificationOTP from "@/lib/email/templates/VerificationOTP";
@@ -51,10 +51,11 @@ export async function sendOTP(email: string, userId: string) {
     if (dbError) throw dbError;
 
     // Send Email via Resend
+    const resend = getResendClient();
     const { error: resendError } = await resend.emails.send({
-      from: SENDER_EMAIL,
+      from: getSenderEmail(),
       to: email,
-      subject: "Your Shivyam Verification Code",
+      subject: "Your SHIVYAM Verification Code",
       react: VerificationOTP({ validationCode: otp }) as React.ReactElement,
     });
 
@@ -119,10 +120,11 @@ export async function verifyOTP(email: string, code: string) {
     const { data: userData } = await (supabase.from("users" as any).select("full_name, role").eq("id", record.user_id).single() as unknown as Promise<{ data: { full_name: string | null; role: string } | null; error: unknown }>);
 
     // 3. Send Welcome Email asynchronously (don't await it to speed up UI response)
+    const resend = getResendClient();
     resend.emails.send({
-      from: SENDER_EMAIL,
+      from: getSenderEmail(),
       to: email,
-      subject: "Welcome to Shivyam!",
+      subject: "Welcome to SHIVYAM!",
       react: Welcome({ name: userData?.full_name || "User" }) as React.ReactElement,
     }).catch(e => logEmailError("sendWelcomeEmail", e));
 

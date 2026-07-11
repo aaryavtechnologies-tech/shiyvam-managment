@@ -19,17 +19,18 @@ export const Welcome = ({ name = "User" }: WelcomeProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Welcome to Shivyam, {name}!</Preview>
+      <Preview>Welcome to SHIVYAM Management Services, {name}!</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
-            <Text style={logo}>Shivyam</Text>
+            <Text style={logo}>SHIVYAM</Text>
+            <Text style={subLogo}>Management Services</Text>
           </Section>
           
           <Section style={contentBox}>
             <Heading style={heading}>Welcome aboard, {name}!</Heading>
             <Text style={text}>
-              Your account has been successfully verified. We are thrilled to have you join our platform. Whether you are looking to hire top talent or find your dream job, Shivyam is here to help you succeed.
+              Your account has been successfully verified. We are thrilled to have you join our platform. Whether you are looking to hire top talent or find your dream job, SHIVYAM Management Services is here to help you succeed.
             </Text>
             
             <Section style={buttonContainer}>
@@ -41,7 +42,7 @@ export const Welcome = ({ name = "User" }: WelcomeProps) => {
           
           <Section style={footer}>
             <Text style={footerText}>
-              &copy; {new Date().getFullYear()} Shivyam. All rights reserved.
+              &copy; {new Date().getFullYear()} SHIVYAM Management Services. All rights reserved.
             </Text>
           </Section>
         </Container>
@@ -69,7 +70,7 @@ const container = {
 };
 
 const header = {
-  backgroundColor: "#2563eb", 
+  backgroundColor: "#0B1B3D", 
   padding: "24px",
   textAlign: "center" as const,
   borderBottom: "2px solid #000000",
@@ -81,6 +82,15 @@ const logo = {
   fontWeight: "800",
   margin: "0",
   letterSpacing: "-0.5px",
+};
+
+const subLogo = {
+  color: "#C5A059", 
+  fontSize: "12px",
+  fontWeight: "600",
+  margin: "4px 0 0",
+  textTransform: "uppercase" as const,
+  letterSpacing: "2px",
 };
 
 const contentBox = {
@@ -108,7 +118,7 @@ const buttonContainer = {
 };
 
 const button = {
-  backgroundColor: "#000000",
+  backgroundColor: "#C5A059",
   color: "#ffffff",
   fontWeight: "800",
   padding: "12px 32px",

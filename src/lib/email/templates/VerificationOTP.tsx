@@ -22,13 +22,14 @@ export const VerificationOTP = ({ validationCode = "123456" }: VerificationOTPPr
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
-            <Text style={logo}>Shivyam</Text>
+            <Text style={logo}>SHIVYAM</Text>
+            <Text style={subLogo}>Management Services</Text>
           </Section>
           
           <Section style={contentBox}>
             <Heading style={heading}>Verify your email address</Heading>
             <Text style={text}>
-              Welcome to Shivyam! Please enter the following 6-digit code to verify your email address and complete your registration.
+              Welcome to SHIVYAM Management Services! Please enter the following 6-digit code to verify your email address and complete your registration.
             </Text>
             
             <Section style={codeBox}>
@@ -42,7 +43,7 @@ export const VerificationOTP = ({ validationCode = "123456" }: VerificationOTPPr
           
           <Section style={footer}>
             <Text style={footerText}>
-              &copy; {new Date().getFullYear()} Shivyam. All rights reserved.
+              &copy; {new Date().getFullYear()} SHIVYAM Management Services. All rights reserved.
             </Text>
           </Section>
         </Container>
@@ -70,7 +71,7 @@ const container = {
 };
 
 const header = {
-  backgroundColor: "#2563eb", // Tailwind primary blue
+  backgroundColor: "#0B1B3D", // Theme primary
   padding: "24px",
   textAlign: "center" as const,
   borderBottom: "2px solid #000000",
@@ -82,6 +83,15 @@ const logo = {
   fontWeight: "800",
   margin: "0",
   letterSpacing: "-0.5px",
+};
+
+const subLogo = {
+  color: "#C5A059", // Theme accent
+  fontSize: "12px",
+  fontWeight: "600",
+  margin: "4px 0 0",
+  textTransform: "uppercase" as const,
+  letterSpacing: "2px",
 };
 
 const contentBox = {
