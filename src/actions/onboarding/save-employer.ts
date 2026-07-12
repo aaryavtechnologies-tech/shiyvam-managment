@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendAdminAlert } from "@/lib/email/actions/admin-alerts";
 
 export async function saveEmployerProgress(data: any, step: number) {
   const supabase = await createClient();
@@ -112,6 +113,14 @@ export async function finishEmployerOnboarding() {
       return { success: false, error: adminError.message };
     }
   }
+
+  // Notify admin that a new employer is ready for verification
+  sendAdminAlert({
+    type: "verification",
+    title: "New Employer Requires Verification",
+    message: "An employer has completed their onboarding profile and is pending company verification.",
+    link: "/dashboard/admin/employers"
+  });
 
   return { success: true };
 }

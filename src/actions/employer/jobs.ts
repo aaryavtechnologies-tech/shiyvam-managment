@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { sendAdminAlert } from "@/lib/email/actions/admin-alerts";
 
 export async function createJobAction(data: any) {
   const supabase = await createClient();
@@ -41,6 +42,14 @@ export async function createJobAction(data: any) {
     console.error("Create Job Error:", error);
     return { success: false, error: error.message };
   }
+
+  // Notify admin
+  sendAdminAlert({
+    type: "job",
+    title: "New Job Posted",
+    message: `A new job "\${data.title}" was posted and requires approval.`,
+    link: "/dashboard/admin/jobs"
+  });
 
   revalidatePath("/dashboard/employer/jobs");
   return { success: true };

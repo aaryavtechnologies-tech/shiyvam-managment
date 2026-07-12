@@ -2,6 +2,8 @@
 
 import { actionClient } from "@/lib/action";
 import { loginSchema, registerSchema } from "@/lib/validations/auth";
+import { logAuditAction } from "@/lib/audit";
+import { sendAdminAlert } from "@/lib/email/actions/admin-alerts";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { AuthError } from "@/types/auth";
 import { redirect } from "next/navigation";
@@ -34,6 +36,14 @@ export const signUpAction = actionClient
     if (data.user) {
       // Fire and forget the OTP sending logic
       await sendOTP(email, data.user.id);
+      
+      // Fire and forget admin alert
+      sendAdminAlert({
+        type: "registration",
+        title: `New \${role === 'employer' ? 'Employer' : 'Candidate'} Registration`,
+        message: `\${fullName} (\${email}) just signed up for a new account.`,
+        link: role === 'employer' ? "/dashboard/admin/employers" : "/dashboard/admin/candidates"
+      });
     }
 
     // Immediately log the user in so they have a session for onboarding
@@ -68,6 +78,15 @@ export const signInAction = actionClient
       .single();
       
     const profile = rawProfile as { role?: string, onboarding_completed?: boolean } | null;
+
+    // Log the login event
+    await logAuditAction({
+      action: "login",
+      admin_id: data.user.id,
+      target_id: data.user.id,
+      target_type: "user",
+      new_data: { role: profile?.role }
+    });
 
     revalidatePath("/");
     return { success: true, user: data.user, role: profile?.role, onboarding_completed: profile?.onboarding_completed };

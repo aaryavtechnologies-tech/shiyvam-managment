@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { logAuditAction } from "@/lib/audit";
 
 export async function verifyCompanyAction(companyId: string, status: string, reason?: string) {
   const supabase = await createClient();
@@ -33,6 +34,15 @@ export async function verifyCompanyAction(companyId: string, status: string, rea
       old_status: oldStatus,
       new_status: status,
       reason: reason || null
+    });
+
+    await logAuditAction({
+      action: status === "rejected" ? "reject" : "approve",
+      admin_id: userData.user.id,
+      target_id: companyId,
+      target_type: "company",
+      old_data: { status: oldStatus },
+      new_data: { status: status, reason: reason }
     });
   }
 

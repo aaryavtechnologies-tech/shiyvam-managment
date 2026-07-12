@@ -3,6 +3,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { logAuditAction } from "@/lib/audit";
 
 async function verifyAdmin() {
   const supabase = await createClient();
@@ -28,6 +29,14 @@ export async function approveJobAction(jobId: string) {
       .eq("id", jobId);
 
     if (error) throw error;
+
+    await logAuditAction({
+      action: "approve",
+      admin_id: user.id,
+      target_id: jobId,
+      target_type: "job",
+    });
+
     revalidatePath("/dashboard/admin/jobs");
     return { success: true };
   } catch (error: any) {
@@ -44,6 +53,15 @@ export async function rejectJobAction(jobId: string, reason: string) {
       .eq("id", jobId);
 
     if (error) throw error;
+
+    await logAuditAction({
+      action: "reject",
+      admin_id: user.id,
+      target_id: jobId,
+      target_type: "job",
+      new_data: { reason }
+    });
+
     revalidatePath("/dashboard/admin/jobs");
     return { success: true };
   } catch (error: any) {
