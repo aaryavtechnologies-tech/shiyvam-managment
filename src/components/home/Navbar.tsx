@@ -113,7 +113,7 @@ export function Navbar() {
                 priority
               />
             </div>
-            <div className="hidden sm:block">
+            <div>
               <span className="font-heading text-xl font-bold text-primary block leading-tight">
                 SHIVYAM
               </span>

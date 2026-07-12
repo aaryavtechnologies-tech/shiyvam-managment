@@ -1,42 +1,26 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { FadeIn } from "@/components/animations/FadeIn";
 
-const testimonials = [
-  {
-    name: "Arjun Mehta",
-    role: "VP – Strategy",
-    company: "Goldman Sachs",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop&face=true",
-    text: "Shivyam transformed my job search entirely. The quality of roles presented was exceptional — only top-tier, relevant positions. Landed a VP role in under 8 weeks.",
-  },
-  {
-    name: "Priya Kapoor",
-    role: "Director – Risk Advisory",
-    company: "Deloitte",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop&face=true",
-    text: "The executive network and precision matching are unmatched. I was connected directly with the hiring partner — no intermediaries, no delays.",
-  },
-  {
-    name: "Rahul Singhania",
-    role: "Partner – Tax",
-    company: "PwC India",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop&face=true",
-    text: "An incredibly professional platform. The caliber of organizations and the thoroughness of the process reflects a deep understanding of senior-level hiring.",
-  },
-  {
-    name: "Sneha Agarwal",
-    role: "Head – M&A Integration",
-    company: "JP Morgan",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop&face=true",
-    text: "The salary insights and exclusive partner network gave me leverage I never had before. I negotiated 40% above my previous package with confidence.",
-  },
-];
-
 export function Testimonials() {
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const { data } = await (supabase.from("testimonials") as any).select("*").eq("is_active", true);
+      if (data) setTestimonials(data);
+    };
+    fetchItems();
+  }, []);
+
+  if (testimonials.length === 0) return null;
 
   return (
     <section className="py-24 bg-white overflow-hidden">
@@ -89,14 +73,18 @@ export function Testimonials() {
                     </p>
                     {/* Author */}
                     <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
-                      <img
-                        src={t.image}
-                        alt={t.name}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-accent/30"
-                      />
+                      <div className="relative w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border-2 border-accent/30">
+                        <Image
+                          src={t.image_url || t.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop"}
+                          alt={t.author_name || "User"}
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                        />
+                      </div>
                       <div>
-                        <h4 className="font-bold text-primary">{t.name}</h4>
-                        <p className="text-sm text-gray-400 font-medium">{t.role} · {t.company}</p>
+                        <h4 className="font-bold text-primary">{t.author_name}</h4>
+                        <p className="text-sm text-gray-400 font-medium">{t.author_role}</p>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Briefcase } from "lucide-react";
 
 export default function AuthLayout({
@@ -12,13 +13,24 @@ export default function AuthLayout({
       <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:w-[600px] lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96 relative">
           <div className="absolute -top-16 -left-8 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none"></div>
-          <Link href="/" className="flex items-center gap-2 mb-10 group inline-flex relative z-10">
-            <div className="bg-primary text-primary-foreground p-2 rounded-xl border border-border shadow-sm group-hover:-translate-y-1 transition-transform">
-              <Briefcase size={24} strokeWidth={2.5} />
+          <Link href="/" className="flex items-center gap-3 mb-10 group inline-flex relative z-10">
+            <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all duration-300">
+              <Image
+                src="/logo.png"
+                alt="Shivyam Management Services Logo"
+                fill
+                className="object-contain p-1"
+                priority
+              />
             </div>
-            <span className="font-heading text-2xl font-extrabold tracking-tight text-foreground group-hover:text-primary transition-colors">
-              JobPortal
-            </span>
+            <div>
+              <span className="font-heading text-xl font-bold text-primary block leading-tight">
+                SHIVYAM
+              </span>
+              <span className="text-[10px] font-semibold text-accent tracking-[0.15em] uppercase leading-tight block">
+                Management Services
+              </span>
+            </div>
           </Link>
           
           <div className="relative z-10">

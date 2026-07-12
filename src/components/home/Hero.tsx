@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Search, MapPin, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +12,21 @@ import { FadeIn } from "@/components/animations/FadeIn";
 const tags = ["Leadership", "Management", "Finance", "Operations", "Consulting", "HR"];
 
 export function Hero() {
+  const [stats, setStats] = useState({ active_jobs: "12,500+", success_stories: "98% Success" });
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const { data } = await (supabase.from("site_statistics") as any).select("*").eq("id", 1).single();
+      if (data) {
+        setStats({
+          active_jobs: data.active_jobs,
+          success_stories: data.success_stories
+        });
+      }
+    };
+    fetchStats();
+  }, []);
   return (
     <section className="relative pt-32 pb-20 overflow-hidden min-h-screen flex items-center bg-primary">
       {/* Background patterns */}
@@ -28,10 +46,12 @@ export function Hero() {
 
             <FadeIn delay={0.1}>
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-white">
-                Elevate Your <br />
+                Connecting <br />
                 <span className="text-accent relative inline-block italic pr-4">
-                  Corporate Journey
+                  Top Talent
                 </span>
+                <br />
+                <span className="text-4xl md:text-5xl lg:text-6xl mt-2 block">with India's Leading Companies</span>
               </h1>
             </FadeIn>
 
@@ -85,10 +105,13 @@ export function Hero() {
           <div className="relative h-[600px] hidden lg:block">
             <FadeIn delay={0.2} direction="left" className="w-full h-full relative">
               <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[90%] h-[85%] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                <img 
+                <Image 
                   src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop" 
                   alt="Corporate Professionals" 
-                  className="w-full h-full object-cover"
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
               </div>
@@ -104,7 +127,7 @@ export function Hero() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-500">Active Jobs</p>
-                  <p className="font-heading font-bold text-2xl text-primary">12,500+</p>
+                  <p className="font-heading font-bold text-2xl text-primary">{stats.active_jobs}</p>
                 </div>
               </motion.div>
 
@@ -118,7 +141,7 @@ export function Hero() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-500">Premium Placements</p>
-                  <p className="font-heading font-bold text-2xl text-primary">98% Success</p>
+                  <p className="font-heading font-bold text-2xl text-primary">{stats.success_stories}</p>
                 </div>
               </motion.div>
             </FadeIn>

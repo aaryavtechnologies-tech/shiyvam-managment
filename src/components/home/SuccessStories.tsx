@@ -1,36 +1,25 @@
 "use client";
 
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
+import { ArrowRight, TrendingUp, User } from "lucide-react";
 import { FadeIn } from "@/components/animations/FadeIn";
 
-const stories = [
-  {
-    name: "Vikram Sharma",
-    role: "Finance Executive",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
-    before: { title: "Senior Analyst", salary: "₹12L/yr", company: "Mid-cap Firm" },
-    after: { title: "VP – Finance", salary: "₹42L/yr", company: "Goldman Sachs" },
-    increase: "+250%",
-  },
-  {
-    name: "Anjali Kapoor",
-    role: "Management Consultant",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
-    before: { title: "Business Analyst", salary: "₹8L/yr", company: "Regional Firm" },
-    after: { title: "Senior Manager", salary: "₹35L/yr", company: "McKinsey & Co." },
-    increase: "+340%",
-  },
-  {
-    name: "Rohan Mehta",
-    role: "Technology Leader",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop",
-    before: { title: "Software Engineer", salary: "₹15L/yr", company: "Startup" },
-    after: { title: "Engineering Director", salary: "₹68L/yr", company: "Accenture" },
-    increase: "+353%",
-  },
-];
-
 export function SuccessStories() {
+  const [stories, setStories] = useState<any[]>([]);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const { data } = await (supabase.from("success_stories") as any).select("*").eq("is_active", true);
+      if (data) setStories(data);
+    };
+    fetchItems();
+  }, []);
+
+  if (stories.length === 0) return null;
+
   return (
     <section className="py-24 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
@@ -52,31 +41,39 @@ export function SuccessStories() {
                 <div className="relative h-28 bg-primary">
                   <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "24px 24px" }}></div>
                   <div className="absolute -bottom-8 left-6">
-                    <img
-                      src={story.image}
-                      alt={story.name}
-                      className="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md"
-                    />
+                    {story.image_url ? (
+                      <div className="relative w-16 h-16 rounded-full border-4 border-white shadow-md bg-white overflow-hidden">
+                        <Image
+                          src={story.image_url}
+                          alt={story.candidate_name}
+                          fill
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full border-4 border-white bg-gray-100 flex items-center justify-center shadow-md">
+                        <User size={32} className="text-gray-400" />
+                      </div>
+                    )}
                   </div>
                   {/* Increase badge */}
                   <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-accent/20 border border-accent/30 text-accent font-bold text-sm px-3 py-1.5 rounded-full backdrop-blur-sm">
                     <TrendingUp size={14} />
-                    {story.increase} Salary
+                    {story.salary_hike}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="pt-12 p-6">
-                  <h3 className="font-bold text-xl text-primary">{story.name}</h3>
-                  <p className="text-gray-400 font-medium text-sm mb-6">{story.role}</p>
+                  <h3 className="font-bold text-xl text-primary">{story.candidate_name}</h3>
+                  <p className="text-gray-400 font-medium text-sm mb-6">{story.previous_role} &rarr; {story.new_role}</p>
 
                   {/* Before / After */}
                   <div className="flex items-stretch gap-3">
                     <div className="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-100">
-                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Before</p>
-                      <p className="font-bold text-gray-700 text-sm">{story.before.title}</p>
-                      <p className="text-xs text-gray-400 font-medium mt-0.5">{story.before.company}</p>
-                      <p className="font-heading font-bold text-primary mt-2 text-sm">{story.before.salary}</p>
+                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Previous</p>
+                      <p className="font-bold text-gray-700 text-sm">{story.previous_role}</p>
                     </div>
 
                     <div className="flex items-center">
@@ -86,10 +83,9 @@ export function SuccessStories() {
                     </div>
 
                     <div className="flex-1 bg-primary/5 rounded-xl p-4 border border-primary/10">
-                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">After</p>
-                      <p className="font-bold text-primary text-sm">{story.after.title}</p>
-                      <p className="text-xs text-gray-400 font-medium mt-0.5">{story.after.company}</p>
-                      <p className="font-heading font-bold text-accent mt-2 text-sm">{story.after.salary}</p>
+                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">New</p>
+                      <p className="font-bold text-primary text-sm">{story.new_role}</p>
+                      <p className="text-xs text-gray-400 font-medium mt-0.5">{story.company}</p>
                     </div>
                   </div>
                 </div>

@@ -24,7 +24,7 @@ export async function approveJobAction(jobId: string) {
     const { supabaseAdmin } = await verifyAdmin();
     const { error } = await supabaseAdmin
       .from("jobs")
-      .update({ status: "Active" })
+      .update({ admin_status: "approved" })
       .eq("id", jobId);
 
     if (error) throw error;
@@ -35,12 +35,12 @@ export async function approveJobAction(jobId: string) {
   }
 }
 
-export async function rejectJobAction(jobId: string) {
+export async function rejectJobAction(jobId: string, reason: string) {
   try {
     const { supabaseAdmin } = await verifyAdmin();
     const { error } = await supabaseAdmin
       .from("jobs")
-      .update({ status: "Rejected" })
+      .update({ admin_status: "rejected", rejection_reason: reason })
       .eq("id", jobId);
 
     if (error) throw error;

@@ -10,7 +10,7 @@ const quickLinks = [
   { name: "Companies", href: "/companies" },
   { name: "Career Advice", href: "/career-advice" },
   { name: "About Us", href: "/about" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 const resources = [

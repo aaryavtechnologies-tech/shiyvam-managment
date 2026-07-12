@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import Link from "next/link";
@@ -7,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   LayoutDashboard, Users, Building, Briefcase, FileText, 
   BarChart, Settings, LifeBuoy, Bell, Mail, Shield, 
-  Activity, ChevronLeft, ChevronRight, Menu, Image as ImageIcon, Box
+  Activity, ChevronLeft, ChevronRight, Menu, Image as ImageIcon, Box, Star, MessageSquare, TrendingUp
 } from "lucide-react";
 
 const mainNavItems = [
@@ -19,6 +21,9 @@ const mainNavItems = [
 ];
 
 const contentNavItems = [
+  { href: "/dashboard/admin/companies", label: "Trusted Partners", icon: Star },
+  { href: "/dashboard/admin/testimonials", label: "Testimonials", icon: MessageSquare },
+  { href: "/dashboard/admin/success-stories", label: "Success Stories", icon: TrendingUp },
   { href: "/dashboard/admin/messages", label: "Messages", icon: Mail },
   { href: "/dashboard/admin/media", label: "Media Library", icon: ImageIcon },
   { href: "/dashboard/admin/email", label: "Email Center", icon: Mail },
@@ -41,32 +46,27 @@ export function Sidebar() {
       {!isCollapsed && <h4 className="px-5 text-[11px] font-bold text-white/40 uppercase tracking-widest mb-3">{title}</h4>}
       <nav className="space-y-1.5 px-3">
         {items.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive = item.href === "/dashboard/admin" 
+            ? pathname === "/dashboard/admin" 
+            : pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-semibold \${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-medium text-sm ${
                 isActive 
-                  ? "bg-accent text-primary shadow-lg shadow-accent/20" 
-                  : "text-white/60 hover:bg-white/10 hover:text-white"
+                  ? "bg-accent text-primary shadow-lg shadow-accent/20 font-bold" 
+                  : "text-white/70 hover:bg-white/10 hover:text-white"
               }`}
               title={isCollapsed ? item.label : ""}
             >
-              <Icon size={20} className={isActive ? "text-primary" : "text-white/60"} />
-              <AnimatePresence initial={false}>
-                {!isCollapsed && (
-                  <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    className="whitespace-nowrap overflow-hidden"
-                  >
-                    {item.label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              <Icon size={18} className={isActive ? "text-primary" : "text-white/70 group-hover:text-white"} />
+              {!isCollapsed && (
+                <span className="whitespace-nowrap overflow-hidden">
+                  {item.label}
+                </span>
+              )}
             </Link>
           );
         })}

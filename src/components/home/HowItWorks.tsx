@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeIn } from "@/components/animations/FadeIn";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const steps = [
@@ -58,10 +59,12 @@ export function HowItWorks() {
                 {/* Image Circle */}
                 <div className="relative mb-8 z-10">
                   <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-xl ring-2 ring-accent/30 group-hover:ring-accent transition-all duration-300">
-                    <img
+                    <Image
                       src={step.img}
                       alt={step.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="144px"
                     />
                     <div className="absolute inset-0 bg-primary/30 rounded-full group-hover:bg-primary/10 transition-all duration-300"></div>
                   </div>

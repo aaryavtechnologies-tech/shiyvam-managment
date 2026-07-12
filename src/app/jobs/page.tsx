@@ -14,7 +14,7 @@ type JobListing = JobRow & {
 import { JobSearchBar, JobSidebarFilters } from "@/components/jobs/job-filters";
 
 export const metadata = {
-  title: "Browse Jobs | JobPortal",
+  title: "Browse Jobs | Shivyam Management Services",
   description: "Find your dream job from thousands of listings.",
 };
 

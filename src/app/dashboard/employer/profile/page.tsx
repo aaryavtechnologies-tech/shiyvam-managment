@@ -38,6 +38,9 @@ export default async function CompanyProfilePage() {
     remote_policy: companyData.remote_policy || metadata.remote_policy || "",
     logo_url: companyData.logo_url || "",
     cover_image_url: companyData.cover_image_url || metadata.cover_image_url || "",
+    pan_number: companyData.pan_number || metadata.pan_number || "",
+    gst_number: companyData.gst_number || metadata.gst_number || "",
+    cin_number: companyData.cin_number || metadata.cin_number || "",
   };
 
   return (

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, Building, MapPin, Briefcase } from "lucide-react";
 
 export const metadata = {
-  title: "Apply for Job | JobPortal",
+  title: "Apply for Job | Shivyam Management Services",
   description: "Submit your application.",
 };
 

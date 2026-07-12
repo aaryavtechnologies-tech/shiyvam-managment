@@ -10,7 +10,7 @@ import { sendOTP } from "@/lib/email/actions/otp";
 
 export const signUpAction = actionClient
   .schema(registerSchema)
-  .action(async ({ parsedInput: { email, password, fullName, role } }) => {
+  .action(async ({ parsedInput: { email, password, fullName, role, panNumber, gstNumber, cinNumber } }) => {
     const adminSupabase = createAdminClient();
 
     const { data, error } = await adminSupabase.auth.admin.createUser({
@@ -20,6 +20,7 @@ export const signUpAction = actionClient
       user_metadata: {
         full_name: fullName,
         role: role,
+        ...(role === 'employer' ? { pan_number: panNumber, gst_number: gstNumber, cin_number: cinNumber } : {})
       },
     });
 

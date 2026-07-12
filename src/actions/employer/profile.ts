@@ -15,7 +15,7 @@ export async function updateCompanyProfile(data: any) {
   const supabaseAdmin = createAdminClient();
 
   // The database schema only has these columns for 'companies'
-  const validCompanyFields = ["name", "logo_url", "website", "description", "industry", "location", "company_size", "mission", "remote_policy", "cover_image_url", "social_links", "gallery_urls"];
+  const validCompanyFields = ["name", "logo_url", "website", "description", "industry", "location", "company_size", "mission", "remote_policy", "cover_image_url", "social_links", "gallery_urls", "pan_number", "gst_number", "cin_number"];
   const companyData: any = {};
   
   // We assume the DB migration has been run so these columns exist now.

@@ -24,6 +24,9 @@ const profileSchema = z.object({
   remote_policy: z.string(),
   logo_url: z.string(),
   cover_image_url: z.string(),
+  pan_number: z.string().optional(),
+  gst_number: z.string().optional(),
+  cin_number: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -104,6 +107,26 @@ export function CompanyProfileForm({ initialData }: { initialData: ProfileFormVa
                 <option value="Hybrid">Hybrid</option>
                 <option value="Remote">Fully Remote</option>
               </select>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card className="p-8 border-2 border-border shadow-md rounded-2xl space-y-6">
+        <div>
+          <h2 className="text-xl font-black font-heading mb-4">Verification Details (Optional)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label className="font-bold">PAN Number</Label>
+              <Input {...form.register("pan_number")} placeholder="ABCDE1234F" className="h-12 border-2 border-border rounded-xl focus-visible:ring-secondary/20 font-medium uppercase" />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-bold">GST Number</Label>
+              <Input {...form.register("gst_number")} placeholder="22AAAAA0000A1Z5" className="h-12 border-2 border-border rounded-xl focus-visible:ring-secondary/20 font-medium uppercase" />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label className="font-bold">CIN (Corporate Identity Number)</Label>
+              <Input {...form.register("cin_number")} placeholder="U12345DL2024PTC123456" className="h-12 border-2 border-border rounded-xl focus-visible:ring-secondary/20 font-medium uppercase" />
             </div>
           </div>
         </div>

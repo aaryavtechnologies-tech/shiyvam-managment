@@ -1,16 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { motion } from "framer-motion";
 
-const companies = [
-  "McKinsey & Company", "Goldman Sachs", "JP Morgan", "Deloitte", "Accenture",
-  "Boston Consulting", "Morgan Stanley", "PwC", "Bain & Company", "KPMG"
-];
-
-// Duplicate for infinite scroll
-const marqueeItems = [...companies, ...companies];
-
 export function TrustedBy() {
+  const [companies, setCompanies] = useState<string[]>([]);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      const { data } = await (supabase.from("trusted_companies") as any).select("name").eq("is_active", true);
+      if (data && data.length > 0) {
+        setCompanies(data.map((c: any) => c.name));
+      }
+    };
+    fetchCompanies();
+  }, []);
+
+  if (companies.length === 0) return null;
+
+  // Duplicate for infinite scroll
+  const marqueeItems = [...companies, ...companies, ...companies, ...companies];
+
   return (
     <section className="py-10 bg-white overflow-hidden border-b border-gray-100">
       <div className="container mx-auto px-4 mb-6">

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { CheckCircle2, ShieldCheck, Target, TrendingUp, Users } from "lucide-react";
 import { FadeIn } from "@/components/animations/FadeIn";
 
@@ -19,10 +20,12 @@ export function WhyChooseUs() {
           {/* Left: Professional Image */}
           <div className="relative order-2 lg:order-1 h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-gray-100 group">
              <FadeIn direction="right" className="w-full h-full relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?q=80&w=1932&auto=format&fit=crop" 
+                <Image 
+                  src="/business_meeting.png" 
                   alt="Business Meeting" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
                

@@ -1,25 +1,28 @@
 import Image from "next/image";
 import { Phone, MapPin, Building } from "lucide-react";
+import dynamic from "next/dynamic";
 import { Navbar } from "@/components/home/Navbar";
-import { Footer } from "@/components/home/Footer";
+
+const AboutCompany = dynamic(() => import("@/components/home/AboutCompany").then(mod => mod.AboutCompany), { ssr: true });
+const Footer = dynamic(() => import("@/components/home/Footer").then(mod => mod.Footer), { ssr: true });
 
 export default function AboutPage() {
   const team = [
     {
       name: "Shivam",
-      role: "Founder and Managing Director",
+      role: "Founder & CEO",
       contact: "7068473074",
       image: "/Shivam.png",
     },
     {
       name: "Satyam Vishwakarma",
-      role: "Co-founder (Growth & Operational Management)",
+      role: "Co-founder and Managing Director",
       contact: "90508 48737",
       image: "/SatyamVishwakarma.png",
     },
     {
       name: "Mrityunjay Kumar Pandey",
-      role: "Co-founder (Finance & Operational Management)",
+      role: "Co-founder and Head of Finance and Operations",
       image: "/MrityunjayKumarPande.png",
     },
   ];
@@ -38,6 +41,10 @@ export default function AboutPage() {
             </p>
           </div>
 
+          <div className="mb-20">
+            <AboutCompany />
+          </div>
+
           {/* Team Section */}
           <div className="mb-20">
             <h2 className="text-3xl font-extrabold mb-8 font-heading border-b-4 border-border pb-4 inline-block">
@@ -52,6 +59,7 @@ export default function AboutPage() {
                       alt={member.name}
                       fill
                       className="object-cover"
+                      sizes="128px"
                     />
                   </div>
                   <h3 className="text-2xl font-bold font-heading mb-2">{member.name}</h3>

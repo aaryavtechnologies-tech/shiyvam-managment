@@ -1,24 +1,55 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 import CountUp from "react-countup";
 import { FadeIn } from "@/components/animations/FadeIn";
 
-const stats = [
-  { value: 1500, suffix: "+", label: "Active Jobs", desc: "Across premium sectors" },
-  { value: 500, suffix: "+", label: "Verified Companies", desc: "Top tier enterprises" },
-  { value: 100, suffix: "+", label: "Global Locations", desc: "Opportunities worldwide" },
-  { value: 50, suffix: "K+", label: "Success Stories", desc: "Careers transformed" },
-];
-
 export function Stats() {
+  const [dbStats, setDbStats] = useState({
+    active_jobs: { value: 1500, suffix: "+" },
+    companies: { value: 500, suffix: "+" },
+    success_stories: { value: 50, suffix: "K+" }
+  });
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const { data } = await (supabase.from("site_statistics") as any).select("*").eq("id", 1).single();
+      if (data) {
+        const parseValue = (str: string) => {
+          const value = parseInt(str.replace(/[^0-9]/g, "")) || 0;
+          const suffix = str.replace(/[0-9]/g, "");
+          return { value, suffix };
+        };
+        setDbStats({
+          active_jobs: parseValue(data.active_jobs),
+          companies: parseValue(data.companies),
+          success_stories: parseValue(data.success_stories)
+        });
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const stats = [
+    { value: dbStats.active_jobs.value, suffix: dbStats.active_jobs.suffix, label: "Active Jobs", desc: "Across premium sectors" },
+    { value: dbStats.companies.value, suffix: dbStats.companies.suffix, label: "Verified Companies", desc: "Top tier enterprises" },
+    { value: 100, suffix: "+", label: "Global Locations", desc: "Opportunities worldwide" },
+    { value: dbStats.success_stories.value, suffix: dbStats.success_stories.suffix, label: "Success Stories", desc: "Careers transformed" },
+  ];
+
   return (
     <section className="relative py-24 bg-primary overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
+        <Image 
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop" 
           alt="Corporate Office" 
-          className="w-full h-full object-cover"
+          fill
+          priority
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-primary/90 mix-blend-multiply"></div>
       </div>

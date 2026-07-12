@@ -12,6 +12,9 @@ export const registerSchema = z.object({
   role: z.enum(["candidate", "employer"], {
     message: "Please select a role.",
   }),
+  panNumber: z.string().optional(),
+  gstNumber: z.string().optional(),
+  cinNumber: z.string().optional(),
 });
 
 export const forgotPasswordSchema = z.object({

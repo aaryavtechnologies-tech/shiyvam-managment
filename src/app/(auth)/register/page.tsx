@@ -171,6 +171,66 @@ export default function RegisterPage() {
             )}
           />
 
+          {form.watch("role") === "employer" && (
+            <div className="space-y-5 p-4 rounded-xl border-2 border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-top-4 duration-300">
+              <p className="text-sm font-bold text-primary">Company Verification Details (Optional)</p>
+              
+              <FormField
+                control={form.control}
+                name="panNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold text-foreground">PAN Number</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="ABCDE1234F" 
+                        className="rounded-xl border-2 border-border shadow-sm bg-white h-12 focus-visible:ring-primary focus-visible:border-primary uppercase"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="gstNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold text-foreground">GST Number</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="22AAAAA0000A1Z5" 
+                        className="rounded-xl border-2 border-border shadow-sm bg-white h-12 focus-visible:ring-primary focus-visible:border-primary uppercase"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="cinNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold text-foreground">CIN (Corporate Identity Number)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="U12345DL2024PTC123456" 
+                        className="rounded-xl border-2 border-border shadow-sm bg-white h-12 focus-visible:ring-primary focus-visible:border-primary uppercase"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
+
           <Button 
             type="submit" 
             disabled={isExecuting}

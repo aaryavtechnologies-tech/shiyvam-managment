@@ -19,7 +19,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const supabase = await createClient();
   const { data: job } = await supabase.from("jobs").select("title").eq("id", params.id).single();
   return {
-    title: job ? `${job.title} | JobPortal` : "Job Not Found",
+    title: job ? `${job.title} | Shivyam Management Services` : "Job Not Found",
   };
 }
 

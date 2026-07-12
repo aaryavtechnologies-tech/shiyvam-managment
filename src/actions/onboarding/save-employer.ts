@@ -16,7 +16,7 @@ export async function saveEmployerProgress(data: any, step: number) {
   const supabaseAdmin = createAdminClient();
 
   // The database schema only has these columns for 'companies'
-  const validCompanyFields = ["name", "logo_url", "website", "description"];
+  const validCompanyFields = ["name", "logo_url", "website", "description", "pan_number", "gst_number", "cin_number"];
   const companyData: any = {};
   const metadata: any = {};
 
@@ -45,9 +45,22 @@ export async function saveEmployerProgress(data: any, step: number) {
       dbError = error;
     }
   } else {
+    // Merge from user_metadata on first creation
+    const { data: userData } = await supabaseAdmin.auth.admin.getUserById(user.id);
+    const existingMeta = userData.user?.user_metadata || {};
+    
+    const initialCompanyData = { 
+      employer_id: user.id, 
+      ...companyData 
+    };
+
+    if (existingMeta.pan_number) initialCompanyData.pan_number = existingMeta.pan_number;
+    if (existingMeta.gst_number) initialCompanyData.gst_number = existingMeta.gst_number;
+    if (existingMeta.cin_number) initialCompanyData.cin_number = existingMeta.cin_number;
+
     const { error } = await supabaseAdmin
       .from("companies")
-      .insert({ employer_id: user.id, ...companyData });
+      .insert(initialCompanyData);
     dbError = error;
   }
 
