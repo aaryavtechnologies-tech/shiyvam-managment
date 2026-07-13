@@ -64,12 +64,7 @@ export default function AboutPage() {
                   <p className="text-primary font-bold mb-4 px-3 py-1 bg-primary/10 rounded-lg inline-block text-sm">
                     {member.role}
                   </p>
-                  {member.contact && (
-                    <div className="flex items-center gap-2 text-muted-foreground mt-auto font-medium">
-                      <Phone size={16} />
-                      <span>{member.contact}</span>
-                    </div>
-                  )}
+
                 </div>
               ))}
             </div>
