@@ -18,11 +18,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Shivyam Management Services — People | Process | Performance",
+  title: "Shivyam Management Services Pvt Ltd — People | Process | Performance",
   description:
-    "Shivyam Management Services connects elite professionals with top-tier organizations across India. Discover premium management, finance, consulting, and leadership opportunities.",
+    "Shivyam Management Services Pvt Ltd connects elite professionals with top-tier organizations across India. Discover premium management, finance, consulting, and leadership opportunities.",
   keywords: [
-    "Shivyam Management Services",
+    "Shivyam Management Services Pvt Ltd",
     "management jobs India",
     "corporate jobs",
     "senior level hiring",
@@ -31,22 +31,22 @@ export const metadata: Metadata = {
     "leadership roles",
     "executive recruitment India",
   ],
-  authors: [{ name: "Shivyam Management Services" }],
-  creator: "Shivyam Management Services",
-  publisher: "Shivyam Management Services",
+  authors: [{ name: "Shivyam Management Services Pvt Ltd" }],
+  creator: "Shivyam Management Services Pvt Ltd",
+  publisher: "Shivyam Management Services Pvt Ltd",
   metadataBase: new URL("https://shivyam.in"),
   openGraph: {
-    title: "Shivyam Management Services — People | Process | Performance",
+    title: "Shivyam Management Services Pvt Ltd — People | Process | Performance",
     description:
       "Connect with elite organizations and discover premium opportunities in management, finance, and operations. Your next big career move starts here.",
     url: "https://shivyam.in",
-    siteName: "Shivyam Management Services",
+    siteName: "Shivyam Management Services Pvt Ltd",
     images: [
       {
         url: "/logo.png",
         width: 1080,
         height: 1080,
-        alt: "Shivyam Management Services Logo",
+        alt: "Shivyam Management Services Pvt Ltd Logo",
       },
     ],
     locale: "en_IN",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shivyam Management Services",
+    title: "Shivyam Management Services Pvt Ltd",
     description:
       "Premium corporate recruitment platform — People | Process | Performance",
     images: ["/logo.png"],

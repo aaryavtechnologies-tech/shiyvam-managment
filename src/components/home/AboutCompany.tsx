@@ -24,7 +24,7 @@ export function AboutCompany() {
             <FadeIn>
               <p className="text-accent font-semibold tracking-widest text-sm uppercase mb-3">About Us</p>
               <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary mb-6">
-                About <span className="italic text-accent">Shivyam</span> Management Services
+                About <span className="italic text-accent">Shivyam</span> Management Services Pvt Ltd
               </h2>
               <p className="text-gray-600 text-lg mb-8 leading-relaxed">
                 We are a premier recruitment and staffing firm dedicated to bridging the gap between top-tier talent and industry-leading organizations. Our holistic approach ensures long-term success for both candidates and employers.

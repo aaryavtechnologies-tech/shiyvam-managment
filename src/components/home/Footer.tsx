@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaLinkedin, FaInstagram, FaFacebook, FaXTwitter } from "react-icons/fa6";
+import { FaLinkedin, FaInstagram, FaFacebook, FaXTwitter, FaWhatsapp } from "react-icons/fa6";
 import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,10 +21,11 @@ const resources = [
 ];
 
 const socials = [
+  { icon: FaWhatsapp, href: "https://wa.me/917068473074", label: "WhatsApp" },
   { icon: FaLinkedin, href: "#", label: "LinkedIn" },
   { icon: FaXTwitter, href: "#", label: "Twitter / X" },
-  { icon: FaInstagram, href: "#", label: "Instagram" },
-  { icon: FaFacebook, href: "#", label: "Facebook" },
+  { icon: FaInstagram, href: "https://www.instagram.com/shivyamservices.in?igsh=NnBjZHRqcDZyaDU5", label: "Instagram" },
+  { icon: FaFacebook, href: "https://www.facebook.com/share/14hHTzPdhrr/", label: "Facebook" },
 ];
 
 export function Footer() {
@@ -46,14 +47,14 @@ export function Footer() {
               <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-white shadow-lg border-2 border-accent/30 group-hover:scale-105 transition-transform duration-300">
                 <Image
                   src="/logo.png"
-                  alt="Shivyam Management Services"
+                  alt="Shivyam Management Services Pvt Ltd"
                   fill
                   className="object-contain p-1.5"
                 />
               </div>
               <div>
                 <span className="font-heading text-xl font-bold text-white block leading-tight">SHIVYAM</span>
-                <span className="text-[10px] font-semibold text-accent tracking-[0.18em] uppercase block">Management Services</span>
+                <span className="text-[10px] font-semibold text-accent tracking-[0.18em] uppercase block">Management Services Pvt Ltd</span>
               </div>
             </Link>
 
@@ -158,7 +159,7 @@ export function Footer() {
               <Image src="/logo.png" alt="Shivyam" fill className="object-contain p-0.5" />
             </div>
             <p className="text-gray-400 font-medium text-sm">
-              © {new Date().getFullYear()} <span className="text-white font-semibold">Shivyam Management Services</span>. All rights reserved.
+              © {new Date().getFullYear()} <span className="text-white font-semibold">Shivyam Management Services Pvt Ltd</span>. All rights reserved.
             </p>
           </div>
           <div className="flex gap-6 font-semibold text-sm text-gray-400">

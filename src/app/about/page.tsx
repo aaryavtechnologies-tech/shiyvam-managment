@@ -21,7 +21,7 @@ export default function AboutPage() {
       image: "/SatyamVishwakarma.png",
     },
     {
-      name: "Mrityunjay Kumar Pandey",
+      name: "Mritunjay Kumar",
       role: "Co-founder and Head of Finance and Operations",
       image: "/MrityunjayKumarPande.png",
     },
@@ -37,7 +37,7 @@ export default function AboutPage() {
               About Us
             </h1>
             <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
-              Meet the minds behind Shivyam Management Services. We're dedicated to connecting the best talent with the greatest companies.
+              Meet the minds behind Shivyam Management Services Pvt Ltd. We're dedicated to connecting the best talent with the greatest companies.
             </p>
           </div>
 
