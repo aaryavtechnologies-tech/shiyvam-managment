@@ -22,9 +22,8 @@ async function verifyAdmin() {
 
 export async function approveJobAction(jobId: string) {
   try {
-    const { supabaseAdmin } = await verifyAdmin();
-    const { error } = await supabaseAdmin
-      .from("jobs")
+    const { supabaseAdmin, user } = await verifyAdmin();
+    const { error } = await (supabaseAdmin.from("jobs") as any)
       .update({ admin_status: "approved" })
       .eq("id", jobId);
 
@@ -46,9 +45,8 @@ export async function approveJobAction(jobId: string) {
 
 export async function rejectJobAction(jobId: string, reason: string) {
   try {
-    const { supabaseAdmin } = await verifyAdmin();
-    const { error } = await supabaseAdmin
-      .from("jobs")
+    const { supabaseAdmin, user } = await verifyAdmin();
+    const { error } = await (supabaseAdmin.from("jobs") as any)
       .update({ admin_status: "rejected", rejection_reason: reason })
       .eq("id", jobId);
 
@@ -71,9 +69,8 @@ export async function rejectJobAction(jobId: string, reason: string) {
 
 export async function deleteJobAction(jobId: string) {
   try {
-    const { supabaseAdmin } = await verifyAdmin();
-    const { error } = await supabaseAdmin
-      .from("jobs")
+    const { supabaseAdmin, user } = await verifyAdmin();
+    const { error } = await (supabaseAdmin.from("jobs") as any)
       .delete()
       .eq("id", jobId);
 

@@ -6,8 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function markAlertAsRead(alertId: string) {
   try {
     const supabaseAdmin = createAdminClient();
-    const { error } = await supabaseAdmin
-      .from("admin_alerts")
+    const { error } = await (supabaseAdmin.from("admin_alerts") as any)
       .update({ is_read: true })
       .eq("id", alertId);
 
@@ -22,8 +21,7 @@ export async function markAlertAsRead(alertId: string) {
 export async function markAllAlertsAsRead() {
   try {
     const supabaseAdmin = createAdminClient();
-    const { error } = await supabaseAdmin
-      .from("admin_alerts")
+    const { error } = await (supabaseAdmin.from("admin_alerts") as any)
       .update({ is_read: true })
       .eq("is_read", false);
 

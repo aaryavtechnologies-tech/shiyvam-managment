@@ -94,7 +94,7 @@ export default function AdminCandidatesPage() {
     } else toast.error(res.error || "Failed to update status");
   };
 
-  const handleAssignRecruiter = async (userId: string, recruiterId: string) => {
+  const handleAssignRecruiter = async (userId: string, recruiterId: string | null) => {
     const res = await assignRecruiterAction(userId, recruiterId === 'unassign' ? null : recruiterId);
     if (res.success) {
       toast.success("Recruiter assigned successfully");
@@ -155,7 +155,7 @@ export default function AdminCandidatesPage() {
         return (
           <Select 
             value={row.original.assigned_recruiter_id || "unassign"} 
-            onValueChange={(val) => handleAssignRecruiter(row.original.id, val)}
+            onValueChange={(val) => handleAssignRecruiter(row.original.id as string, val)}
           >
             <SelectTrigger className="w-[140px] h-8 text-xs font-bold border-2">
               <SelectValue placeholder="Assign..." />

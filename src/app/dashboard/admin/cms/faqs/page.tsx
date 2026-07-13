@@ -80,7 +80,7 @@ export default function FAQsPage() {
       : await createFaqAction(formData);
 
     if (res.success) {
-      toast.success(\`FAQ \${editingItem ? 'updated' : 'created'}\`);
+      toast.success(`FAQ ${editingItem ? 'updated' : 'created'}`);
       setModalOpen(false);
       fetchData();
     } else {
@@ -172,7 +172,7 @@ export default function FAQsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Category</Label>
-                <Select value={formData.category} onValueChange={val => setFormData({ ...formData, category: val })}>
+                <Select value={formData.category} onValueChange={val => setFormData({ ...formData, category: val as string })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="general">General</SelectItem>

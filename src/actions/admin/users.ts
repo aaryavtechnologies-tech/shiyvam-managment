@@ -22,7 +22,7 @@ async function verifyAdmin() {
 
 export async function deleteUserAction(userId: string) {
   try {
-    const { supabaseAdmin } = await verifyAdmin();
+    const { supabaseAdmin, user } = await verifyAdmin();
     const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (error) throw error;

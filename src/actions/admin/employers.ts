@@ -8,8 +8,7 @@ export async function verifyCompanyAction(companyId: string, status: string, rea
   const supabase = await createClient();
   
   // Get current status
-  const { data: company, error: fetchErr } = await supabase
-    .from("companies")
+  const { data: company, error: fetchErr } = await (supabase.from("companies") as any)
     .select("verification_status")
     .eq("id", companyId)
     .single();

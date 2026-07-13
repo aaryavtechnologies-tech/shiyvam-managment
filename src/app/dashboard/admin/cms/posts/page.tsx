@@ -100,7 +100,7 @@ export default function PostsPage() {
       : await createPostAction(formData);
 
     if (res.success) {
-      toast.success(\`Post \${editingPost ? 'updated' : 'created'} successfully\`);
+      toast.success(`Post ${editingPost ? 'updated' : 'created'} successfully`);
       setModalOpen(false);
       fetchData();
     } else {
@@ -215,7 +215,7 @@ export default function PostsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Category</Label>
-                <Select value={formData.category} onValueChange={val => setFormData({ ...formData, category: val })}>
+                <Select value={formData.category} onValueChange={val => setFormData({ ...formData, category: val as string })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="blog">Blog</SelectItem>

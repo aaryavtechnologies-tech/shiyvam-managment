@@ -24,7 +24,7 @@ async function verifyAdmin() {
 export async function createPostAction(data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("posts").insert(data);
+    const { error } = await (supabaseAdmin.from("posts") as any).insert(data);
     if (error) throw error;
 
     await logAuditAction({
@@ -44,7 +44,7 @@ export async function createPostAction(data: any) {
 export async function updatePostAction(id: string, data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("posts").update(data).eq("id", id);
+    const { error } = await (supabaseAdmin.from("posts") as any).update(data).eq("id", id);
     if (error) throw error;
 
     await logAuditAction({
@@ -65,7 +65,7 @@ export async function updatePostAction(id: string, data: any) {
 export async function deletePostAction(id: string) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("posts").delete().eq("id", id);
+    const { error } = await (supabaseAdmin.from("posts") as any).delete().eq("id", id);
     if (error) throw error;
 
     await logAuditAction({
@@ -86,7 +86,7 @@ export async function deletePostAction(id: string) {
 export async function createTestimonialAction(data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("testimonials").insert(data);
+    const { error } = await (supabaseAdmin.from("testimonials") as any).insert(data);
     if (error) throw error;
 
     await logAuditAction({
@@ -106,7 +106,7 @@ export async function createTestimonialAction(data: any) {
 export async function updateTestimonialAction(id: string, data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("testimonials").update(data).eq("id", id);
+    const { error } = await (supabaseAdmin.from("testimonials") as any).update(data).eq("id", id);
     if (error) throw error;
 
     await logAuditAction({
@@ -126,7 +126,7 @@ export async function updateTestimonialAction(id: string, data: any) {
 export async function deleteTestimonialAction(id: string) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("testimonials").delete().eq("id", id);
+    const { error } = await (supabaseAdmin.from("testimonials") as any).delete().eq("id", id);
     if (error) throw error;
 
     await logAuditAction({
@@ -147,7 +147,7 @@ export async function deleteTestimonialAction(id: string) {
 export async function createFaqAction(data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("faq").insert(data);
+    const { error } = await (supabaseAdmin.from("faq") as any).insert(data);
     if (error) throw error;
 
     await logAuditAction({
@@ -166,7 +166,7 @@ export async function createFaqAction(data: any) {
 export async function updateFaqAction(id: string, data: any) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("faq").update(data).eq("id", id);
+    const { error } = await (supabaseAdmin.from("faq") as any).update(data).eq("id", id);
     if (error) throw error;
 
     await logAuditAction({
@@ -186,7 +186,7 @@ export async function updateFaqAction(id: string, data: any) {
 export async function deleteFaqAction(id: string) {
   try {
     const { supabaseAdmin, user } = await verifyAdmin();
-    const { error } = await supabaseAdmin.from("faq").delete().eq("id", id);
+    const { error } = await (supabaseAdmin.from("faq") as any).delete().eq("id", id);
     if (error) throw error;
 
     await logAuditAction({

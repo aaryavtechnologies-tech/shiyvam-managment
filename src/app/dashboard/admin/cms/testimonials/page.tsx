@@ -88,7 +88,7 @@ export default function TestimonialsPage() {
       : await createTestimonialAction(formData);
 
     if (res.success) {
-      toast.success(\`Testimonial \${editingItem ? 'updated' : 'created'}\`);
+      toast.success(`Testimonial ${editingItem ? 'updated' : 'created'}`);
       setModalOpen(false);
       fetchData();
     } else {

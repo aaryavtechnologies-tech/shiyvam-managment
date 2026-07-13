@@ -15,7 +15,7 @@ export async function sendAdminAlert({ type, title, message, link }: SendAdminAl
     const supabaseAdmin = createAdminClient();
 
     // 1. Save to database for the in-app Notification Center
-    await supabaseAdmin.from("admin_alerts").insert({
+    await (supabaseAdmin.from("admin_alerts") as any).insert({
       type,
       title,
       message,
