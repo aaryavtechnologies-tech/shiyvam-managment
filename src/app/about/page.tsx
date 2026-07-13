@@ -11,13 +11,11 @@ export default function AboutPage() {
     {
       name: "Shivam",
       role: "Founder & CEO",
-      contact: "7068473074",
       image: "/Shivam.png",
     },
     {
       name: "Satyam Vishwakarma",
       role: "Co-founder and Managing Director",
-      contact: "90508 48737",
       image: "/SatyamVishwakarma.png",
     },
     {
