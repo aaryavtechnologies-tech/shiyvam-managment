@@ -12,7 +12,7 @@ import { FadeIn } from "@/components/animations/FadeIn";
 const tags = ["Leadership", "Management", "Finance", "Operations", "Consulting", "HR"];
 
 export function Hero() {
-  const [stats, setStats] = useState({ active_jobs: "12,500+", success_stories: "98% Success" });
+  const [stats, setStats] = useState({ active_jobs: "0+", success_stories: "0% Success" });
   const supabase = createClient();
 
   useEffect(() => {

@@ -9,86 +9,26 @@ import Link from "next/link";
 
 const filters = ["All", "Remote", "Full Time", "Hybrid", "Internship"];
 
-const jobs = [
-  {
-    company: "Goldman Sachs",
-    initials: "GS",
-    role: "Vice President – Equity Research",
-    salary: "₹40L - ₹65L",
-    location: "Mumbai, MH",
-    type: "Full Time",
-    experience: "8+ Years",
-    badgeBg: "bg-blue-50",
-    badgeText: "text-blue-700",
-    tag: "Finance",
-  },
-  {
-    company: "McKinsey & Co.",
-    initials: "MC",
-    role: "Senior Engagement Manager",
-    salary: "₹55L - ₹90L",
-    location: "New Delhi",
-    type: "Hybrid",
-    experience: "6+ Years",
-    badgeBg: "bg-indigo-50",
-    badgeText: "text-indigo-700",
-    tag: "Consulting",
-  },
-  {
-    company: "Deloitte India",
-    initials: "DT",
-    role: "Risk Advisory Director",
-    salary: "₹45L - ₹70L",
-    location: "Bengaluru, KA",
-    type: "Full Time",
-    experience: "10+ Years",
-    badgeBg: "bg-emerald-50",
-    badgeText: "text-emerald-700",
-    tag: "Advisory",
-  },
-  {
-    company: "Accenture",
-    initials: "AC",
-    role: "Technology Lead – Cloud",
-    salary: "₹25L - ₹40L",
-    location: "Pune, MH",
-    type: "Hybrid",
-    experience: "5+ Years",
-    badgeBg: "bg-purple-50",
-    badgeText: "text-purple-700",
-    tag: "Technology",
-  },
-  {
-    company: "JP Morgan",
-    initials: "JP",
-    role: "Executive Director – IB",
-    salary: "₹80L - ₹1.2Cr",
-    location: "Mumbai, MH",
-    type: "Full Time",
-    experience: "12+ Years",
-    badgeBg: "bg-rose-50",
-    badgeText: "text-rose-700",
-    tag: "Banking",
-  },
-  {
-    company: "PwC India",
-    initials: "PW",
-    role: "Partner – Tax & Regulatory",
-    salary: "₹1Cr+",
-    location: "All India",
-    type: "Full Time",
-    experience: "15+ Years",
-    badgeBg: "bg-amber-50",
-    badgeText: "text-amber-700",
-    tag: "Consulting",
-  },
-];
+const jobs: {
+  company: string;
+  initials: string;
+  role: string;
+  salary: string;
+  location: string;
+  type: string;
+  experience: string;
+  badgeBg: string;
+  badgeText: string;
+  tag: string;
+}[] = [];
 
 export function FeaturedJobs() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [saved, setSaved] = useState<number[]>([]);
 
   const filteredJobs = activeFilter === "All" ? jobs : jobs.filter(job => job.type === activeFilter);
+
+  if (jobs.length === 0) return null;
 
   return (
     <section className="py-24 bg-white">

@@ -8,9 +8,9 @@ import { FadeIn } from "@/components/animations/FadeIn";
 
 export function Stats() {
   const [dbStats, setDbStats] = useState({
-    active_jobs: { value: 1500, suffix: "+" },
-    companies: { value: 500, suffix: "+" },
-    success_stories: { value: 50, suffix: "K+" }
+    active_jobs: { value: 0, suffix: "+" },
+    companies: { value: 0, suffix: "+" },
+    success_stories: { value: 0, suffix: "+" }
   });
   const supabase = createClient();
 
@@ -33,10 +33,12 @@ export function Stats() {
     fetchStats();
   }, []);
 
+  if (dbStats.active_jobs.value === 0) return null;
+
   const stats = [
     { value: dbStats.active_jobs.value, suffix: dbStats.active_jobs.suffix, label: "Active Jobs", desc: "Across premium sectors" },
     { value: dbStats.companies.value, suffix: dbStats.companies.suffix, label: "Verified Companies", desc: "Top tier enterprises" },
-    { value: 100, suffix: "+", label: "Global Locations", desc: "Opportunities worldwide" },
+    { value: 0, suffix: "+", label: "Global Locations", desc: "Opportunities worldwide" },
     { value: dbStats.success_stories.value, suffix: dbStats.success_stories.suffix, label: "Success Stories", desc: "Careers transformed" },
   ];
 

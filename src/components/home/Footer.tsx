@@ -22,7 +22,7 @@ const resources = [
 
 const socials = [
   { icon: FaWhatsapp, href: "https://wa.me/917068473074", label: "WhatsApp" },
-  { icon: FaLinkedin, href: "#", label: "LinkedIn" },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/in/shivyamservices", label: "LinkedIn" },
   { icon: FaXTwitter, href: "#", label: "Twitter / X" },
   { icon: FaInstagram, href: "https://www.instagram.com/shivyamservices.in?igsh=NnBjZHRqcDZyaDU5", label: "Instagram" },
   { icon: FaFacebook, href: "https://www.facebook.com/share/14hHTzPdhrr/", label: "Facebook" },

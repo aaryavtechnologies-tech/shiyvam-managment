@@ -5,18 +5,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { FadeIn } from "@/components/animations/FadeIn";
 
-const categories = [
-  { title: "Management", jobs: 320, img: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop" },
-  { title: "Finance & Banking", jobs: 520, img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop" },
-  { title: "Technology", jobs: 890, img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop" },
-  { title: "Human Resources", jobs: 215, img: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=800&auto=format&fit=crop" },
-  { title: "Marketing", jobs: 310, img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop" },
-  { title: "Operations", jobs: 189, img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" },
-  { title: "Legal & Compliance", jobs: 94, img: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?q=80&w=800&auto=format&fit=crop" },
-  { title: "Consulting", jobs: 142, img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" },
-];
+const categories: { title: string; jobs: number; img: string }[] = [];
 
 export function JobCategories() {
+  if (categories.length === 0) return null;
   return (
     <section className="py-24 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
