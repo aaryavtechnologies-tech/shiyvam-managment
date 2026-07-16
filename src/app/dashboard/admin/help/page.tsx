@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { 
   LifeBuoy, BookOpen, MessageSquare, Phone, 
   Mail, ExternalLink, Code2, Cpu, Globe, ArrowRight, MessageCircle
@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 
 export default function HelpPage() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -16,7 +16,7 @@ export default function HelpPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
