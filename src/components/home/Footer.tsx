@@ -77,9 +77,13 @@ export function Footer() {
                 <Phone size={15} className="text-accent flex-shrink-0" />
                 <span className="font-medium">+91 70684 73074 &nbsp;|&nbsp; +91 90508 48737</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-gray-300">
-                <Mail size={15} className="text-accent flex-shrink-0" />
-                <a href="mailto:info@shivyam.in" className="font-medium hover:text-accent transition-colors">info@shivyam.in</a>
+              <div className="flex items-start gap-3 text-sm text-gray-300">
+                <Mail size={15} className="text-accent mt-1 flex-shrink-0" />
+                <div className="flex flex-col gap-2">
+                  <a href="mailto:Hr_support@shivyamservices.com" className="font-medium hover:text-accent transition-colors">Hr_support@shivyamservices.com</a>
+                  <a href="mailto:info@shivyamservices.com" className="font-medium hover:text-accent transition-colors">info@shivyamservices.com</a>
+                  <a href="mailto:business@shivyamservices.com" className="font-medium hover:text-accent transition-colors">business@shivyamservices.com</a>
+                </div>
               </div>
             </div>
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { signOutAction } from "@/actions/auth";
 import { useState } from "react";
+import Link from "next/link";
 
 export function TopNav({ userEmail }: { userEmail: string }) {
   const { theme, setTheme } = useTheme();
@@ -72,12 +73,12 @@ export function TopNav({ userEmail }: { userEmail: string }) {
                   <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
                 </div>
                 
-                <button className="w-full text-left px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2">
+                <Link href="/dashboard/admin/profile" onClick={() => setShowProfile(false)} className="w-full text-left px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2">
                   <User size={16} /> Profile
-                </button>
-                <button className="w-full text-left px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2">
+                </Link>
+                <Link href="/dashboard/admin/settings" onClick={() => setShowProfile(false)} className="w-full text-left px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2">
                   <Settings size={16} /> Settings
-                </button>
+                </Link>
                 <div className="h-px bg-border my-2" />
                 <form action={signOutAction} className="w-full">
                   <button type="submit" className="w-full text-left px-4 py-2 text-sm font-bold text-destructive hover:bg-destructive/10 transition-colors flex items-center gap-2">

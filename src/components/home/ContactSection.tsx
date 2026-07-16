@@ -25,17 +25,21 @@ export function ContactSection() {
           {/* Contact Info Cards */}
           <div className="w-full lg:w-1/3 space-y-6">
             <FadeIn delay={0.1}>
-              <a href="mailto:info@shivyam.com" className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-all group block">
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-all group">
                 <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Mail className="text-primary" size={32} />
                 </div>
-                <h3 className="font-bold text-xl text-gray-900 mb-2">Business Email</h3>
-                <p className="text-gray-500">info@shivyam.com</p>
-              </a>
+                <h3 className="font-bold text-xl text-gray-900 mb-2">Email Us</h3>
+                <div className="flex flex-col gap-1 mt-2">
+                  <a href="mailto:Hr_support@shivyamservices.com" className="text-gray-500 hover:text-primary transition-colors text-sm">Hr_support@shivyamservices.com</a>
+                  <a href="mailto:info@shivyamservices.com" className="text-gray-500 hover:text-primary transition-colors text-sm">info@shivyamservices.com</a>
+                  <a href="mailto:business@shivyamservices.com" className="text-gray-500 hover:text-primary transition-colors text-sm">business@shivyamservices.com</a>
+                </div>
+              </div>
             </FadeIn>
 
             <FadeIn delay={0.2}>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-all group block">
+              <a href="https://wa.me/917068473074" target="_blank" rel="noopener noreferrer" className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-all group block">
                 <div className="w-16 h-16 bg-[#25D366]/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <MessageCircle className="text-[#25D366]" size={32} />
                 </div>
