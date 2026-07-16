@@ -26,14 +26,10 @@ const contentNavItems = [
   { href: "/dashboard/admin/cms/testimonials", label: "Testimonials", icon: MessageSquare },
   { href: "/dashboard/admin/success-stories", label: "Success Stories", icon: TrendingUp },
   { href: "/dashboard/admin/messages", label: "Messages", icon: Mail },
-  { href: "/dashboard/admin/media", label: "Media Library", icon: ImageIcon },
-  { href: "/dashboard/admin/email", label: "Email Center", icon: Mail },
-  { href: "/dashboard/admin/notifications", label: "Notifications", icon: Bell },
 ];
 
 const settingsNavItems = [
   { href: "/dashboard/admin/settings", label: "Settings", icon: Settings },
-  { href: "/dashboard/admin/system-status", label: "System Status", icon: Activity },
   { href: "/dashboard/admin/audit-logs", label: "Audit Logs", icon: FileText },
   { href: "/dashboard/admin/help", label: "Help Center", icon: LifeBuoy },
 ];
