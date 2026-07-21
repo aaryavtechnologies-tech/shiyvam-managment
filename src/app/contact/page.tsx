@@ -57,8 +57,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-heading font-extrabold text-xl mb-1">Email Us</h3>
-                  <p className="text-muted-foreground font-medium">support@sarkarilink.com</p>
-                  <p className="text-muted-foreground font-medium">sales@sarkarilink.com</p>
+                  <a href="mailto:Hr_support@shivyamservices.com" className="block text-muted-foreground font-medium hover:text-primary transition-colors">Hr_support@shivyamservices.com</a>
+                  <a href="mailto:info@shivyamservices.com" className="block text-muted-foreground font-medium hover:text-primary transition-colors">info@shivyamservices.com</a>
+                  <a href="mailto:business@shivyamservices.com" className="block text-muted-foreground font-medium hover:text-primary transition-colors">business@shivyamservices.com</a>
                 </div>
               </div>
 
@@ -68,8 +69,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-heading font-extrabold text-xl mb-1">Call Us</h3>
-                  <p className="text-muted-foreground font-medium">1-800-JOB-LINK</p>
-                  <p className="text-muted-foreground font-medium">Mon-Fri, 9am to 6pm EST</p>
+                  <a href="tel:+917068473074" className="block text-muted-foreground font-medium hover:text-blue-600 transition-colors">+91 70684 73074</a>
                 </div>
               </div>
 
@@ -79,8 +79,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-heading font-extrabold text-xl mb-1">Headquarters</h3>
-                  <p className="text-muted-foreground font-medium">123 Career Avenue</p>
-                  <p className="text-muted-foreground font-medium">New York, NY 10001</p>
+                  <p className="text-muted-foreground font-medium">Sajeti, Ghatampur</p>
+                  <p className="text-muted-foreground font-medium">Kanpur Nagar, Uttar Pradesh 209206</p>
                 </div>
               </div>
             </div>
