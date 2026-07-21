@@ -106,12 +106,18 @@ export default function AboutPage() {
                 </h2>
                 <div className="space-y-4">
                   <div className="flex flex-col gap-3">
-                    <p className="text-xl font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit">
-                      +91 7068473074
-                    </p>
-                    <p className="text-xl font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit">
-                      +91 90508 48737
-                    </p>
+                    <a href="tel:+917068473074" className="text-lg md:text-xl font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit hover:bg-gray-50 transition-colors">
+                      +91 70684 73074
+                    </a>
+                    <a href="mailto:Hr_support@shivyamservices.com" className="text-sm md:text-base font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit hover:bg-gray-50 transition-colors">
+                      Hr_support@shivyamservices.com
+                    </a>
+                    <a href="mailto:info@shivyamservices.com" className="text-sm md:text-base font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit hover:bg-gray-50 transition-colors">
+                      info@shivyamservices.com
+                    </a>
+                    <a href="mailto:business@shivyamservices.com" className="text-sm md:text-base font-bold bg-white text-foreground px-4 py-2 rounded-xl border-2 border-border shadow-sm inline-flex items-center w-fit hover:bg-gray-50 transition-colors">
+                      business@shivyamservices.com
+                    </a>
                   </div>
                   <div className="mt-8 p-4 bg-black/20 rounded-xl border border-white/20 backdrop-blur-sm shadow-inner">
                     <p className="font-bold flex items-center gap-2">
