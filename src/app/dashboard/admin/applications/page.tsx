@@ -44,7 +44,7 @@ export const columns: ColumnDef<ApplicationAdmin>[] = [
         "bg-red-50 text-red-700 border-red-200";
 
       return (
-        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border-2 \${colorClass}`}>
+        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border-2 ${colorClass}`}>
           {status}
         </span>
       );
@@ -82,27 +82,36 @@ export default function AdminApplicationsPage() {
   const [loading, setLoading] = useState(true);
 
   async function fetchData() {
-    const supabase = createClient();
-    const { data: apps, error } = await supabase
-      .from("applications")
-      .select(`
-        id, status, applied_at,
-        jobs (title),
-        users!candidate_id (full_name)
-      `)
-      .order("applied_at", { ascending: false });
+    try {
+      const supabase = createClient();
+      const { data: apps, error } = await supabase
+        .from("applications")
+        .select(`
+          id, status, applied_at,
+          jobs (title),
+          users!candidate_id (full_name)
+        `)
+        .order("applied_at", { ascending: false });
 
-    if (apps) {
-      const formatted = apps.map((a: any) => ({
-        id: a.id,
-        status: a.status,
-        applied_at: a.applied_at,
-        job_title: a.jobs?.title,
-        candidate_name: a.users?.full_name,
-      }));
-      setData(formatted);
+      if (error) {
+        console.error("Error fetching applications:", error);
+      }
+
+      if (apps) {
+        const formatted = apps.map((a: any) => ({
+          id: a.id,
+          status: a.status,
+          applied_at: a.applied_at,
+          job_title: a.jobs?.title || "Unknown Job",
+          candidate_name: a.users?.full_name || "Unknown Candidate",
+        }));
+        setData(formatted);
+      }
+    } catch (err) {
+      console.error("Unexpected error in fetchData:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   useEffect(() => {
