@@ -72,7 +72,7 @@ export async function getAdminCandidatesAction() {
         candidate_profiles:candidate_profiles!candidate_profiles_user_id_fkey (candidate_status, resume_url, assigned_recruiter_id)
       `)
       .eq("role", "candidate")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false }) as any;
 
     if (error) throw error;
     return { success: true, data };
@@ -110,7 +110,7 @@ export async function getAdminCandidateDetailAction(userId: string) {
         )
       `)
       .eq("id", userId)
-      .single();
+      .single() as any;
 
     if (error) throw error;
     return { success: true, data };

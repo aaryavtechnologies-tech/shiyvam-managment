@@ -47,7 +47,7 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
       )
     `, { count: "exact" })
     .eq("status", "published")
-    .eq("admin_status", "approved")
+    .eq("admin_status" as any, "approved")
     .order("created_at", { ascending: false });
 
   if (q) {

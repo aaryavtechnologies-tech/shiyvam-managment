@@ -28,8 +28,8 @@ export default function AdminCompanyDetailsPage() {
           *,
           users:employer_id (email, full_name, phone)
         `)
-        .eq("id", params.id)
-        .single();
+        .eq("id", params.id as string)
+        .single() as any;
         
       if (compData) {
         setCompany(compData);

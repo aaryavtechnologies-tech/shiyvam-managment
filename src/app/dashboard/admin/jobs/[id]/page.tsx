@@ -25,7 +25,7 @@ export default function AdminJobDetailsPage() {
           companies (*),
           applications (id)
         `)
-        .eq("id", params.id)
+        .eq("id", params.id as string)
         .single();
         
       if (data) {
