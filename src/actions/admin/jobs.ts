@@ -112,7 +112,7 @@ export async function adminCreateJobAction(formData: FormData) {
     let { data: company, error: companyError } = await supabaseAdmin
       .from("companies")
       .select("id")
-      .eq("user_id", user.id)
+      .eq("employer_id", user.id)
       .single();
 
     let companyId = company?.id;
@@ -121,11 +121,11 @@ export async function adminCreateJobAction(formData: FormData) {
       const { data: newCompany, error: newCompanyError } = await supabaseAdmin
         .from("companies")
         .insert({
-          user_id: user.id,
+          employer_id: user.id,
           name: companyName || "System Admin",
           industry: industry || "Management",
           verification_status: "verified"
-        })
+        } as any)
         .select("id")
         .single();
         
@@ -157,7 +157,7 @@ export async function adminCreateJobAction(formData: FormData) {
         department,
         status: "published",
         admin_status: "approved"
-      });
+      } as any);
 
     if (jobError) throw jobError;
 
