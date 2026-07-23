@@ -118,3 +118,22 @@ export async function getAdminCandidateDetailAction(userId: string) {
     return { success: false, error: error.message };
   }
 }
+
+export async function getAdminApplicationsAction() {
+  try {
+    const { supabaseAdmin } = await verifyAdmin();
+    const { data, error } = await supabaseAdmin
+      .from("applications")
+      .select(`
+        id, status, applied_at,
+        jobs (title),
+        users!candidate_id (full_name)
+      `)
+      .order("applied_at", { ascending: false });
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}

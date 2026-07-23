@@ -6,6 +6,7 @@ import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getAdminApplicationsAction } from "@/actions/admin/users";
 
 export type ApplicationAdmin = {
   id: string;
@@ -83,22 +84,15 @@ export default function AdminApplicationsPage() {
 
   async function fetchData() {
     try {
-      const supabase = createClient();
-      const { data: apps, error } = await supabase
-        .from("applications")
-        .select(`
-          id, status, applied_at,
-          jobs (title),
-          users!candidate_id (full_name)
-        `)
-        .order("applied_at", { ascending: false });
+      const result = await getAdminApplicationsAction();
 
-      if (error) {
-        console.error("Error fetching applications:", error);
+      if (!result.success) {
+        console.error("Error fetching applications:", result.error);
+        return;
       }
 
-      if (apps) {
-        const formatted = apps.map((a: any) => ({
+      if (result.data) {
+        const formatted = result.data.map((a: any) => ({
           id: a.id,
           status: a.status,
           applied_at: a.applied_at,
