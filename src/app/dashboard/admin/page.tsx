@@ -135,9 +135,15 @@ export default async function AdminDashboardPage() {
           <p className="text-muted-foreground font-medium text-lg mt-2">Here is what's happening on your platform today.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-white border-2 border-border rounded-xl font-bold hover:bg-muted transition-colors shadow-sm">
-            Download Report
-          </button>
+          {usersCount && usersCount > 0 ? (
+            <button className="px-4 py-2 bg-white border-2 border-border rounded-xl font-bold hover:bg-muted transition-colors shadow-sm">
+              Download Report
+            </button>
+          ) : (
+            <div className="px-4 py-2 bg-muted/50 border-2 border-border border-dashed rounded-xl font-bold text-muted-foreground shadow-sm">
+              Not enough data for reports
+            </div>
+          )}
         </div>
       </div>
 

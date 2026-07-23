@@ -9,14 +9,15 @@ async function verifyAdmin() {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized");
 
-  const { data: userData } = await supabase
+  const supabaseAdmin = createAdminClient();
+  const { data: userData } = await supabaseAdmin
     .from("users")
     .select("role")
     .eq("id", user.id)
     .single();
 
   if (userData?.role !== "admin") throw new Error("Forbidden. Admin role required.");
-  return { user, supabaseAdmin: createAdminClient() };
+  return { user, supabaseAdmin };
 }
 
 export async function markMessageReadAction(messageId: string) {

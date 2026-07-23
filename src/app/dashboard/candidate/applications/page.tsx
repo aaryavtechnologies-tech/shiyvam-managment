@@ -106,7 +106,7 @@ export default async function CandidateApplicationsPage() {
                       )}
                     </div>
                     <div>
-                      <Link href={`/jobs/\${app.jobs?.id}`} className="font-heading text-xl font-extrabold hover:text-primary transition-colors line-clamp-1">
+                      <Link href={`/jobs/${app.jobs?.id}`} className="font-heading text-xl font-extrabold hover:text-primary transition-colors line-clamp-1">
                         {app.jobs?.title}
                       </Link>
                       <p className="font-bold text-muted-foreground mb-2">{app.jobs?.companies?.name} • {app.jobs?.location}</p>
@@ -130,7 +130,7 @@ export default async function CandidateApplicationsPage() {
                         </Button>
                       )}
                       <Button variant="outline" size="sm" asChild className="rounded-lg border-2 shadow-sm flex-1 md:flex-none hover:bg-primary hover:text-primary-foreground">
-                        <Link href={`/jobs/\${app.jobs?.id}`}>
+                        <Link href={`/jobs/${app.jobs?.id}`}>
                           Details <ChevronRight size={16} className="ml-1" />
                         </Link>
                       </Button>

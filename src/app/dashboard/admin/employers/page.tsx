@@ -9,14 +9,16 @@ import { Button } from "@/components/ui/button";
 import { deleteUserAction } from "@/actions/admin/users";
 import { verifyCompanyAction } from "@/actions/admin/employers";
 import { toast } from "sonner";
+import { getAdminEmployersAction } from "@/actions/admin/users";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export type EmployerAdmin = {
   id: string;
@@ -39,18 +41,10 @@ export default function AdminEmployersPage() {
   const [selectedEmployer, setSelectedEmployer] = useState<EmployerAdmin | null>(null);
 
   async function fetchData() {
-    const supabase = createClient();
-    const { data: users, error } = await supabase
-      .from("users")
-      .select(`
-        id, email, full_name, created_at,
-        companies (id, name, pan_number, gst_number, cin_number, verification_status)
-      `)
-      .eq("role", "employer")
-      .order("created_at", { ascending: false });
-
-    if (users) {
-      const formatted = users.map((u: any) => ({
+    setLoading(true);
+    const result = await getAdminEmployersAction();
+    if (result.success && result.data) {
+      const formatted = result.data.map((u: any) => ({
         id: u.id,
         email: u.email,
         full_name: u.full_name,
@@ -60,6 +54,8 @@ export default function AdminEmployersPage() {
         created_at: u.created_at,
       }));
       setData(formatted);
+    } else {
+      toast.error(result.error || "Failed to fetch employers");
     }
     setLoading(false);
   }
@@ -129,6 +125,18 @@ export default function AdminEmployersPage() {
       cell: ({ row }) => {
         return (
           <div className="flex items-center justify-end gap-2">
+            {row.original.company && (
+              <Link href={`/dashboard/admin/companies/${row.original.company.id}`}>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                  title="View Company Details"
+                >
+                  <Eye size={16} />
+                </Button>
+              </Link>
+            )}
             <Button 
               variant="outline" 
               size="sm" 

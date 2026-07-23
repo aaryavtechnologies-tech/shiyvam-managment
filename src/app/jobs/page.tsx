@@ -12,6 +12,7 @@ type JobListing = JobRow & {
 };
 
 import { JobSearchBar, JobSidebarFilters } from "@/components/jobs/job-filters";
+import { JobPagination } from "@/components/jobs/job-pagination";
 
 export const metadata = {
   title: "Browse Jobs | Shivyam Management Services",
@@ -28,6 +29,12 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
   const type = typeof searchParams.type === 'string' ? searchParams.type : '';
   const mode = typeof searchParams.mode === 'string' ? searchParams.mode : '';
   const exp = typeof searchParams.exp === 'string' ? searchParams.exp : '';
+  const page = typeof searchParams.page === 'string' ? parseInt(searchParams.page, 10) : 1;
+  const currentPage = isNaN(page) || page < 1 ? 1 : page;
+  
+  const JOBS_PER_PAGE = 10;
+  const start = (currentPage - 1) * JOBS_PER_PAGE;
+  const end = start + JOBS_PER_PAGE - 1;
 
   // Server-side filtering
   let query = supabase
@@ -38,8 +45,9 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
         name,
         logo_url
       )
-    `)
-    .eq("status", "Active") // Changed from "published" to match the actual created status
+    `, { count: "exact" })
+    .eq("status", "published")
+    .eq("admin_status", "approved")
     .order("created_at", { ascending: false });
 
   if (q) {
@@ -56,8 +64,12 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
   }
   // If we had an experience_level column on jobs, we'd filter it here. Currently skipping for schema alignment.
 
-  const { data: rawJobs, error } = await query;
+  query = query.range(start, end);
+
+  const { data: rawJobs, count, error } = await query;
   const jobs = rawJobs as unknown as JobListing[] | null;
+  const totalJobs = count || 0;
+  const totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -81,7 +93,7 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
           {/* Job Listings */}
           <div className="flex-1 mt-12 lg:mt-0">
             <div className="mb-6 flex justify-between items-center">
-              <h2 className="font-bold text-xl">{jobs?.length || 0} Jobs Found</h2>
+              <h2 className="font-bold text-xl">{totalJobs.toLocaleString()} Jobs Found</h2>
               <select className="border-2 border-border rounded-lg px-3 py-2 font-bold bg-white focus:outline-none focus:border-primary">
                 <option>Newest Postings</option>
                 <option>Highest Salary</option>
@@ -105,6 +117,8 @@ export default async function JobsPage(props: { searchParams: Promise<{ [key: st
                 {jobs.map(job => (
                   <JobCard key={job.id} job={job as any} />
                 ))}
+                
+                <JobPagination currentPage={currentPage} totalPages={totalPages} />
               </div>
             )}
           </div>

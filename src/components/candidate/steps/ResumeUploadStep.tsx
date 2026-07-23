@@ -2,7 +2,7 @@ import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FileText, UploadCloud, X, CheckCircle2 } from "lucide-react";
 import { CandidateProfileInput } from "@/lib/validations/candidate";
-import { createClient } from "@/lib/supabase/client";
+import { uploadCandidateResumeAction } from "@/actions/onboarding/save-candidate";
 
 export function ResumeUploadStep({ form }: { form: UseFormReturn<CandidateProfileInput> }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -27,26 +27,17 @@ export function ResumeUploadStep({ form }: { form: UseFormReturn<CandidateProfil
     setError(null);
 
     try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error("Not authenticated");
+      const formData = new FormData();
+      formData.append("file", file);
 
-      const fileExt = file.name.split('.').pop();
-      const fileName = `\${user.id}/\${Math.random().toString(36).substring(2)}.\${fileExt}`;
+      const res = await uploadCandidateResumeAction(formData);
 
-      const { data, error: uploadError } = await supabase.storage
-        .from('candidate-resumes')
-        .upload(fileName, file, { upsert: true });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to upload resume.");
+      }
 
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('candidate-resumes')
-        .getPublicUrl(fileName); // In reality, this is private, so we might store the path and use signed URLs, but storing path is fine.
-
-      // For simplicity in this demo, we'll store the path in DB.
-      form.setValue("resume_url", data.path, { shouldValidate: true });
+      // res.filePath is now the public URL we returned
+      form.setValue("resume_url", res.filePath, { shouldValidate: true });
     } catch (err: any) {
       setError(err.message || "Failed to upload resume.");
     } finally {

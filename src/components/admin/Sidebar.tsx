@@ -30,7 +30,6 @@ const contentNavItems = [
 
 const settingsNavItems = [
   { href: "/dashboard/admin/settings", label: "Settings", icon: Settings },
-  { href: "/dashboard/admin/audit-logs", label: "Audit Logs", icon: FileText },
   { href: "/dashboard/admin/help", label: "Help Center", icon: LifeBuoy },
 ];
 

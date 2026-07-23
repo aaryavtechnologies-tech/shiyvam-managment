@@ -5,10 +5,9 @@ import Link from "next/link";
 import { ArrowLeft, Download, ExternalLink, Calendar, Mail, Phone, MapPin, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ApplicationStatusUpdater } from "./_components/status-updater";
+import { ApplicationStatusUpdater } from "@/app/dashboard/employer/applications/[id]/_components/status-updater";
 
-export default async function ApplicationDetailsPage({
+export default async function AdminApplicationDetailsPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -20,6 +19,10 @@ export default async function ApplicationDetailsPage({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
+  
+  // Verify Admin
+  const { data: userData } = await supabase.from("users").select("role").eq("id", user.id).single();
+  if (userData?.role !== "admin") redirect("/dashboard");
 
   const supabaseAdmin = createAdminClient();
 
@@ -33,12 +36,12 @@ export default async function ApplicationDetailsPage({
     .eq("id", appId)
     .single();
 
-  if (!application || (application as any).job?.employer_id !== user.id) {
+  if (!application) {
     return (
       <div className="p-8 text-center">
         <h1 className="text-2xl font-bold">Application not found</h1>
-        <p className="text-muted-foreground mt-2">You don't have permission to view this application or it doesn't exist.</p>
-        <Link href="/dashboard/employer/applications">
+        <p className="text-muted-foreground mt-2">This application does not exist.</p>
+        <Link href="/dashboard/admin/applications">
           <Button className="mt-4">Back to Applications</Button>
         </Link>
       </div>
@@ -62,7 +65,7 @@ export default async function ApplicationDetailsPage({
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-6xl mx-auto pb-12">
       <div className="flex items-center gap-4">
-        <Link href="/dashboard/employer/applications">
+        <Link href="/dashboard/admin/applications">
           <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm border-2 border-transparent hover:border-border transition-all">
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -70,7 +73,7 @@ export default async function ApplicationDetailsPage({
         <div>
           <h1 className="font-heading text-2xl font-black tracking-tight">{name}'s Application</h1>
           <p className="text-muted-foreground font-medium text-sm">
-            Applied for <Link href={`/dashboard/employer/jobs/${appData.job.id}`} className="font-bold text-secondary hover:underline">{appData.job.title}</Link> • {new Date(appData.created_at).toLocaleDateString()}
+            Applied for <Link href={`/dashboard/admin/jobs/${appData.job.id}`} className="font-bold text-secondary hover:underline">{appData.job.title}</Link> • {new Date(appData.created_at).toLocaleDateString()}
           </p>
         </div>
         <div className="ml-auto">
@@ -79,7 +82,7 @@ export default async function ApplicationDetailsPage({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Candidate Info & Notes */}
+        {/* Left Column: Candidate Info */}
         <div className="space-y-6">
           <Card className="p-6 border-2 border-border shadow-md rounded-2xl bg-white">
             <h2 className="text-lg font-black font-heading mb-4">Candidate Profile</h2>
@@ -117,32 +120,9 @@ export default async function ApplicationDetailsPage({
             </div>
 
             <div className="mt-6 pt-6 border-t-2 border-border space-y-3">
-              {meta.linkedin && (
-                <a href={meta.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm font-bold text-blue-600 hover:underline">
-                  <ExternalLink className="h-4 w-4" /> LinkedIn Profile
-                </a>
-              )}
-              {meta.github && (
-                <a href={meta.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm font-bold text-gray-800 hover:underline">
-                  <ExternalLink className="h-4 w-4" /> GitHub Profile
-                </a>
-              )}
-              {meta.portfolio && (
-                <a href={meta.portfolio} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm font-bold text-secondary hover:underline">
-                  <ExternalLink className="h-4 w-4" /> Personal Portfolio
-                </a>
-              )}
-            </div>
-          </Card>
-
-          <Card className="p-6 border-2 border-border shadow-md rounded-2xl bg-white flex flex-col h-[400px]">
-            <h2 className="text-lg font-black font-heading mb-4">Internal Notes</h2>
-            <div className="flex-1 overflow-y-auto mb-4 border-2 border-border rounded-xl p-4 bg-muted/10">
-              <p className="text-sm font-medium text-muted-foreground text-center italic mt-10">Notes functionality coming soon.</p>
-            </div>
-            <div className="flex gap-2">
-              <Input placeholder="Type a note..." className="flex-1 h-11 border-2 border-border rounded-xl font-medium" />
-              <Button className="h-11 rounded-xl border border-border bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 font-bold">Add</Button>
+              <Link href={`/dashboard/admin/candidates/${appData.candidate.id}`} className="block">
+                <Button className="w-full font-bold">View Full Profile</Button>
+              </Link>
             </div>
           </Card>
         </div>

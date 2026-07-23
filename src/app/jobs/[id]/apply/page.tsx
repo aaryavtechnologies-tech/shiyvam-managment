@@ -59,6 +59,15 @@ export default async function ApplyPage(props: { params: Promise<{ id: string }>
     ? safeJob.companies.name 
     : "Company";
 
+  // Fetch candidate's profile to get default resume
+  const { data: profile } = await supabase
+    .from("candidate_profiles")
+    .select("resume_url")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const existingResume = profile?.resume_url || null;
+
   return (
     <div className="min-h-screen bg-muted/20 flex flex-col">
       <div className="bg-white border-b-2 border-border shadow-sm sticky top-0 z-50">
@@ -97,7 +106,7 @@ export default async function ApplyPage(props: { params: Promise<{ id: string }>
             </div>
           </div>
 
-          <ApplyForm jobId={safeJob.id} jobTitle={safeJob.title} companyName={companyName} />
+          <ApplyForm jobId={safeJob.id} jobTitle={safeJob.title} companyName={companyName} candidateResumeUrl={existingResume} />
           
         </div>
       </main>

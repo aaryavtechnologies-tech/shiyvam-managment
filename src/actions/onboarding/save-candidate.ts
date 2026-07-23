@@ -91,8 +91,8 @@ export async function uploadCandidateResumeAction(formData: FormData) {
     return { success: false, error: "No file provided" };
   }
 
-  if (file.size > 5 * 1024 * 1024) {
-    return { success: false, error: "File must be less than 5MB" };
+  if (file.size > 10 * 1024 * 1024) {
+    return { success: false, error: "File must be less than 10MB" };
   }
 
   if (file.type !== "application/pdf") {
@@ -100,18 +100,24 @@ export async function uploadCandidateResumeAction(formData: FormData) {
   }
 
   try {
-    const supabaseAdmin = createAdminClient();
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(7)}.${fileExt}`;
-    const filePath = `${user.id}/${fileName}`;
+    
+    const fs = require('fs/promises');
+    const path = require('path');
+    
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'candidate-resumes', user.id);
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const filePath = path.join(uploadDir, fileName);
+    
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    await fs.writeFile(filePath, buffer);
 
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from('candidate-resumes')
-      .upload(filePath, file);
+    const publicUrl = `/uploads/candidate-resumes/${user.id}/${fileName}`;
 
-    if (uploadError) throw uploadError;
-
-    return { success: true, filePath };
+    return { success: true, filePath: publicUrl };
   } catch (error: any) {
     console.error("Server Upload Error:", error);
     return { success: false, error: error.message || "Failed to upload file" };

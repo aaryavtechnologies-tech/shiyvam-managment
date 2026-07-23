@@ -75,15 +75,11 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="bg-background border-b-2 border-border shadow-sm sticky top-0 z-50">
-        <div className="py-4">
-          <Navbar />
-        </div>
-      </div>
+      <Navbar />
 
       <main className="flex-1">
         {/* Job Header Hero */}
-        <div className="bg-primary pt-20 pb-24 relative overflow-hidden">
+        <div className="bg-primary pt-32 pb-24 relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
           <div className="container mx-auto px-4 md:px-6 relative z-10 text-primary-foreground">
             <div className="flex flex-col md:flex-row gap-8 items-start justify-between">
@@ -98,7 +94,7 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
                 <div>
                   <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4">{job.title}</h1>
                   <div className="flex flex-wrap gap-x-6 gap-y-3 font-semibold text-lg opacity-90">
-                    <span className="flex items-center gap-2"><Building size={20} /> {job.companies?.name}</span>
+                    <span className="flex items-center gap-2"><Building size={20} /> {job.companies?.name || "Unknown Company"}</span>
                     <span className="flex items-center gap-2"><MapPin size={20} /> {job.location || "Remote"}</span>
                     <span className="flex items-center gap-2"><Briefcase size={20} /> {job.employment_type}</span>
                   </div>
@@ -217,7 +213,7 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
               </div>
 
               <div className="bg-muted/30 rounded-3xl border-2 border-border p-8">
-                <h3 className="font-heading font-extrabold text-xl mb-4">About {job.companies?.name}</h3>
+                <h3 className="font-heading font-extrabold text-xl mb-4">About {job.companies?.name || "the Company"}</h3>
                 <p className="font-medium text-muted-foreground mb-6 line-clamp-4">
                   {job.companies?.description || "No description provided by the company."}
                 </p>

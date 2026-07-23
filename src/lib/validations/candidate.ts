@@ -59,7 +59,7 @@ export type CandidateEducationSkillsInput = z.infer<typeof candidateEducationSki
 export const applicationSchema = z.object({
   job_id: z.string().uuid(),
   cover_letter: z.string().max(1000).optional(),
-  resume_url: z.string().url("Valid resume URL required"),
+  resume_url: z.string().min(1, "Resume is required"),
   expected_salary: z.string().optional(),
   notice_period: z.string().optional(),
   portfolio_url: z.string().url("Invalid URL").optional().or(z.literal("")),

@@ -31,7 +31,6 @@ const navItems = [
   { href: "/admin/cms", label: "CMS", icon: LayoutTemplate },
   { href: "/admin/notifications", label: "Notifications", icon: Bell },
   { href: "/admin/reports", label: "Reports", icon: ShieldAlert },
-  { href: "/admin/audit-logs", label: "Audit Logs", icon: FileText },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

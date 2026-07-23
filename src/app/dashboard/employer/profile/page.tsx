@@ -44,7 +44,7 @@ export default async function CompanyProfilePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500 pt-10 pb-20">
       <div>
         <h1 className="font-heading text-3xl font-black tracking-tight">Company Profile</h1>
         <p className="text-muted-foreground font-medium mt-1">Manage your public company page and brand assets.</p>

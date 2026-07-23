@@ -21,6 +21,10 @@ export async function createAdminUser(formData: FormData) {
       email,
       password,
       email_confirm: true, // Auto-confirm for admin
+      user_metadata: {
+        full_name: fullName,
+        role: "admin",
+      }
     });
 
     if (authError) {
@@ -32,18 +36,15 @@ export async function createAdminUser(formData: FormData) {
       return { success: false, error: "Failed to create auth user" };
     }
 
-    // 2. Insert into the public.users table
+    // 2. Update the public.users table created by the trigger
     const { error: dbError } = await adminSupabase
       .from("users")
-      .insert({
-        id: authData.user.id,
-        email: email,
-        full_name: fullName,
+      .update({
         phone: phone || null,
-        role: "admin",
         onboarding_completed: true,
         current_step: 4
-      });
+      })
+      .eq("id", authData.user.id);
 
     if (dbError) {
       console.error("DB insertion error:", dbError);
@@ -142,6 +143,45 @@ export async function changeAdminPassword(formData: FormData) {
 
     return { success: true };
   } catch (err: any) {
+    return { success: false, error: err.message || "An unexpected error occurred" };
+  }
+}
+
+export async function deleteAdminUser(userId: string) {
+  try {
+    const adminSupabase = createAdminClient();
+    
+    // Deleting the user from auth.users will automatically cascade to public.users
+    const { error } = await adminSupabase.auth.admin.deleteUser(userId);
+    
+    if (error) {
+      console.error("Error deleting admin user:", error);
+      return { success: false, error: error.message };
+    }
+    
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An unexpected error occurred" };
+  }
+}
+
+export async function getAdminsAction() {
+  try {
+    const adminSupabase = createAdminClient();
+    const { data, error } = await adminSupabase
+      .from("users")
+      .select("id, email, full_name, created_at")
+      .eq("role", "admin")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching admins:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, admins: data };
+  } catch (err: any) {
+    console.error("Unexpected error in getAdminsAction:", err);
     return { success: false, error: err.message || "An unexpected error occurred" };
   }
 }

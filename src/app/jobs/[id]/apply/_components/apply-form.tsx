@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-export function ApplyForm({ jobId, jobTitle, companyName }: { jobId: string, jobTitle: string, companyName: string }) {
+export function ApplyForm({ jobId, jobTitle, companyName, candidateResumeUrl }: { jobId: string, jobTitle: string, companyName: string, candidateResumeUrl?: string | null }) {
   const router = useRouter();
   
   const form = useForm<ApplicationInput>({
@@ -23,7 +23,7 @@ export function ApplyForm({ jobId, jobTitle, companyName }: { jobId: string, job
     defaultValues: {
       job_id: jobId,
       cover_letter: "",
-      resume_url: "",
+      resume_url: candidateResumeUrl || "",
       expected_salary: "",
       notice_period: "",
       portfolio_url: "",
@@ -80,10 +80,13 @@ export function ApplyForm({ jobId, jobTitle, companyName }: { jobId: string, job
                          </button>
                        </div>
                     ) : (
-                      <div className="border-2 border-dashed border-border rounded-xl p-8 text-center bg-muted/30 hover:bg-muted transition-colors cursor-pointer" onClick={() => form.setValue("resume_url", "https://example.com/resume.pdf", { shouldValidate: true })}>
+                      <div className="border-2 border-dashed border-border rounded-xl p-8 text-center bg-muted/30 hover:bg-muted transition-colors">
                         <UploadCloud className="mx-auto mb-2 text-muted-foreground" size={32} />
                         <p className="font-bold text-lg mb-1">Upload your resume</p>
-                        <p className="text-sm text-muted-foreground font-medium">Click to use your profile resume (Simulation)</p>
+                        <p className="text-sm text-muted-foreground font-medium mb-4">Please upload a resume in your profile first, or attach one here (Simulated upload below)</p>
+                        <Button type="button" variant="outline" size="sm" onClick={() => form.setValue("resume_url", "/uploads/candidate-resumes/demo-resume.pdf", { shouldValidate: true })}>
+                          Simulate Upload
+                        </Button>
                       </div>
                     )}
                   </FormControl>

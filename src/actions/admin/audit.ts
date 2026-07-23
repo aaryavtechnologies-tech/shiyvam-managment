@@ -28,7 +28,9 @@ export async function logAdminAction({
   }
 
   // 2. Verify Admin Role
-  const { data: userData } = await supabase
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabaseAdmin = createAdminClient();
+  const { data: userData } = await supabaseAdmin
     .from("users")
     .select("role")
     .eq("id", user.id)

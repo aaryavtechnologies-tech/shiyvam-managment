@@ -5,14 +5,15 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { createAdminUser } from "@/app/actions/admin-management";
-import { Save, Loader2, UserPlus } from "lucide-react";
+import { createAdminUser, deleteAdminUser, getAdminsAction } from "@/app/actions/admin-management";
+import { Save, Loader2, UserPlus, Eye, EyeOff, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [savingStats, setSavingStats] = useState(false);
   const [creatingAdmin, setCreatingAdmin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   
   const [stats, setStats] = useState({
@@ -20,12 +21,23 @@ export default function SettingsPage() {
     companies: "",
     success_stories: ""
   });
+  const [admins, setAdmins] = useState<any[]>([]);
   
   const supabase = createClient();
 
   useEffect(() => {
     fetchStats();
+    fetchAdmins();
   }, []);
+
+  const fetchAdmins = async () => {
+    const result = await getAdminsAction();
+    if (result.success && result.admins) {
+      setAdmins(result.admins);
+    } else {
+      toast.error("Failed to fetch admins");
+    }
+  };
 
   const fetchStats = async () => {
     setLoading(true);
@@ -70,10 +82,23 @@ export default function SettingsPage() {
     if (result.success) {
       toast.success("New admin user created successfully");
       formRef.current?.reset();
+      fetchAdmins();
     } else {
       toast.error(result.error || "Failed to create admin user");
     }
     setCreatingAdmin(false);
+  };
+
+  const handleDeleteAdmin = async (id: string) => {
+    if (confirm("Are you sure you want to delete this admin user? This action cannot be undone.")) {
+      const result = await deleteAdminUser(id);
+      if (result.success) {
+        toast.success("Admin user deleted successfully");
+        fetchAdmins();
+      } else {
+        toast.error(result.error || "Failed to delete admin user");
+      }
+    }
   };
 
   if (loading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-primary" size={32} /></div>;
@@ -137,7 +162,8 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="admins">
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <div className="pb-4 border-b border-gray-100 mb-6">
               <h2 className="text-lg font-bold text-gray-900">Create New Admin</h2>
               <p className="text-sm text-gray-500 mt-1">Add a new user with full administrative privileges.</p>
@@ -162,7 +188,23 @@ export default function SettingsPage() {
               
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700">Password <span className="text-red-500">*</span></label>
-                <Input type="password" name="password" required placeholder="••••••••" minLength={6} className="bg-gray-50 h-11" />
+                <div className="relative">
+                  <Input 
+                    type={showPassword ? "text" : "password"} 
+                    name="password" 
+                    required 
+                    placeholder="••••••••" 
+                    minLength={6} 
+                    className="bg-gray-50 h-11 pr-10" 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
                 <p className="text-xs text-gray-500">Minimum 6 characters required.</p>
               </div>
 
@@ -173,6 +215,39 @@ export default function SettingsPage() {
                 </Button>
               </div>
             </form>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm h-fit">
+              <div className="pb-4 border-b border-gray-100 mb-6">
+                <h2 className="text-lg font-bold text-gray-900">Existing Admins</h2>
+                <p className="text-sm text-gray-500 mt-1">Manage current administrative users.</p>
+              </div>
+
+              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                {admins.map((admin) => (
+                  <div key={admin.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{admin.full_name}</h3>
+                      <p className="text-sm text-gray-500">{admin.email}</p>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleDeleteAdmin(admin.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      title="Delete Admin"
+                    >
+                      <Trash2 size={18} />
+                    </Button>
+                  </div>
+                ))}
+                {admins.length === 0 && (
+                  <div className="text-center py-8 text-gray-500 text-sm">
+                    No admins found.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

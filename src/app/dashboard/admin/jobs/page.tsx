@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Trash2, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Trash2, CheckCircle, XCircle, Clock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { approveJobAction, rejectJobAction, deleteJobAction } from "@/actions/admin/jobs";
+import { approveJobAction, rejectJobAction, deleteJobAction, getAdminJobsAction } from "@/actions/admin/jobs";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 export type JobAdmin = {
   id: string;
@@ -27,27 +28,20 @@ export default function AdminJobsPage() {
 
   async function fetchData() {
     setLoading(true);
-    const supabase = createClient();
-    const { data: jobs, error } = await supabase
-      .from("jobs")
-      .select(`
-        id, title, status, admin_status, created_at,
-        companies (name),
-        applications (id)
-      `)
-      .order("created_at", { ascending: false });
-
-    if (jobs) {
-      const formatted = jobs.map((j: any) => ({
+    const result = await getAdminJobsAction();
+    if (result.success && result.data) {
+      const formatted = result.data.map((j: any) => ({
         id: j.id,
         title: j.title,
         company_name: j.companies && !Array.isArray(j.companies) ? j.companies.name : "Unknown",
         admin_status: j.admin_status || 'pending',
         status: j.status,
-        applicants: j.applications ? j.applications.length : 0,
+        applicants: Array.isArray(j.applications) ? j.applications.length : 0,
         created_at: j.created_at,
       }));
       setData(formatted);
+    } else {
+      toast.error(result.error || "Failed to fetch jobs");
     }
     setLoading(false);
   }
@@ -105,6 +99,16 @@ export default function AdminJobsPage() {
         const status = job.admin_status.toLowerCase();
         return (
           <div className="flex items-center justify-end gap-2">
+            <Link href={`/dashboard/admin/jobs/${job.id}`}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                title="View Details"
+              >
+                <Eye size={16} />
+              </Button>
+            </Link>
             {status === "pending" && (
               <>
                 <Button 
@@ -161,13 +165,17 @@ export default function AdminJobsPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading text-3xl font-extrabold tracking-tight">Manage Jobs</h1>
-          <p className="text-muted-foreground font-medium mt-1">Review pending jobs before they go live on the platform.</p>
+          <h1 className="text-2xl font-bold text-gray-900 font-heading">Jobs Management</h1>
+          <p className="text-gray-500 text-sm mt-1">Review and manage job postings.</p>
         </div>
-        <Button className="border border-border shadow-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90">
-          Export CSV
-        </Button>
+        <Link href="/dashboard/admin/jobs/create">
+          <Button className="bg-primary text-white font-bold rounded-xl shadow-md">
+            + Create New Job
+          </Button>
+        </Link>
+      </div>
       </div>
 
       <Tabs defaultValue="pending" value={activeTab} onValueChange={setActiveTab} className="w-full">

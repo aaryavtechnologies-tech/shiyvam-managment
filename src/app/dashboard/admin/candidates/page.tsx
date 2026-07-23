@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DataTable, DataTableColumnHeader } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Trash2, FileText, Download, UserPlus, CheckCircle, XCircle } from "lucide-react";
+import { Trash2, FileText, Download, UserPlus, CheckCircle, XCircle, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { deleteUserAction } from "@/actions/admin/users";
+import Link from "next/link";
+import { deleteUserAction, getAdminCandidatesAction, getAdminRecruitersAction } from "@/actions/admin/users";
 import { updateCandidateStatusAction, assignRecruiterAction } from "@/actions/admin/candidates";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -31,53 +32,46 @@ export default function AdminCandidatesPage() {
 
   async function fetchData() {
     setLoading(true);
-    const supabase = createClient();
     
     // Fetch candidates
-    const { data: users, error } = await supabase
-      .from("users")
-      .select(`
-        id, email, full_name, created_at,
-        applications (id),
-        candidate_profiles (resume_url, candidate_status, assigned_recruiter_id)
-      `)
-      .eq("role", "candidate")
-      .order("created_at", { ascending: false });
-
-    // Fetch employers (recruiters)
-    const { data: employerData } = await supabase
-      .from("users")
-      .select("id, full_name, email")
-      .eq("role", "employer");
+    const candidatesRes = await getAdminCandidatesAction();
+    const recruitersRes = await getAdminRecruitersAction();
       
-    const employersList = employerData?.map(e => ({
-      id: e.id,
-      name: e.full_name || e.email
-    })) || [];
-    setEmployers(employersList);
+    if (recruitersRes.success && recruitersRes.data) {
+      const employersList = recruitersRes.data.map((e: any) => ({
+        id: e.id,
+        name: e.full_name || e.email
+      }));
+      setEmployers(employersList);
+    }
 
-    if (users) {
-      const formatted = users.map((u: any) => {
-        const profile = u.candidate_profiles && u.candidate_profiles.length > 0 ? u.candidate_profiles[0] : null;
-        let recName = null;
-        if (profile?.assigned_recruiter_id) {
-          const emp = employersList.find(e => e.id === profile.assigned_recruiter_id);
-          if (emp) recName = emp.name;
+    if (candidatesRes.success && candidatesRes.data) {
+      const formatted = candidatesRes.data.map((u: any) => {
+        const profile = Array.isArray(u.candidate_profiles) && u.candidate_profiles.length > 0 
+          ? u.candidate_profiles[0] 
+          : (u.candidate_profiles || {});
+          
+        let recruiterName = null;
+        if (profile.assigned_recruiter_id && recruitersRes.data) {
+          const rec = recruitersRes.data.find((e: any) => e.id === profile.assigned_recruiter_id);
+          if (rec) recruiterName = rec.full_name || rec.email;
         }
 
         return {
           id: u.id,
           email: u.email,
           full_name: u.full_name,
-          applications: u.applications ? u.applications.length : 0,
+          applications: Array.isArray(u.applications) ? u.applications.length : 0,
           created_at: u.created_at,
-          status: profile?.candidate_status || 'pending',
-          resume_url: profile?.resume_url || null,
-          assigned_recruiter_id: profile?.assigned_recruiter_id || null,
-          assigned_recruiter_name: recName
+          status: profile.candidate_status || "pending",
+          resume_url: profile.resume_url || null,
+          assigned_recruiter_id: profile.assigned_recruiter_id || null,
+          assigned_recruiter_name: recruiterName
         };
       });
       setData(formatted);
+    } else {
+      toast.error(candidatesRes.error || "Failed to fetch candidates");
     }
     setLoading(false);
   }
@@ -103,15 +97,13 @@ export default function AdminCandidatesPage() {
   };
 
   const handleDownloadResume = async (url: string, name: string) => {
-    const supabase = createClient();
-    const { data, error } = await supabase.storage.from('candidate-resumes').download(url);
-    if (error || !data) {
-      toast.error("Resume not found or access denied.");
-      return;
-    }
-    const blobUrl = URL.createObjectURL(data);
+    const downloadUrl = url.startsWith('/') || url.startsWith('http') 
+      ? url 
+      : `/uploads/candidate-resumes/${url}`;
+      
     const a = document.createElement('a');
-    a.href = blobUrl;
+    a.href = downloadUrl;
+    a.target = '_blank';
     a.download = `${name.replace(/\s+/g, '_')}_Resume.pdf`;
     document.body.appendChild(a);
     a.click();
@@ -121,13 +113,16 @@ export default function AdminCandidatesPage() {
   const columns: ColumnDef<CandidateAdmin>[] = [
     {
       accessorKey: "full_name",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Candidate" />,
       cell: ({ row }) => (
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
-            {(row.getValue("full_name") as string)?.charAt(0).toUpperCase() || (row.getValue("email") as string)?.charAt(0).toUpperCase()}
+        <div className="flex items-center gap-3 min-w-[160px]">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center font-black text-sm border border-primary/20 shadow-sm flex-shrink-0">
+            {(row.getValue("full_name") as string)?.charAt(0).toUpperCase() || "?"}
           </div>
-          <span className="font-bold">{row.getValue("full_name") || "No Name"}</span>
+          <div>
+            <p className="font-bold text-gray-900 leading-tight">{row.getValue("full_name") || "No Name"}</p>
+            <p className="text-xs text-muted-foreground font-medium">{row.original.email}</p>
+          </div>
         </div>
       ),
     },
@@ -137,10 +132,10 @@ export default function AdminCandidatesPage() {
       cell: ({ row }) => {
         const s = row.getValue("status") as string;
         return (
-          <Badge variant="outline" className={`capitalize \${
-            s === 'shortlisted' ? 'border-green-300 text-green-700 bg-green-50' :
-            s === 'rejected' ? 'border-red-300 text-red-700 bg-red-50' : 
-            'border-amber-300 text-amber-700 bg-amber-50'
+          <Badge className={`capitalize font-bold px-3 py-1 rounded-lg text-xs ${
+            s === 'shortlisted' ? 'bg-green-100 text-green-700 border border-green-200' :
+            s === 'rejected' ? 'bg-red-100 text-red-700 border border-red-200' :
+            'bg-amber-100 text-amber-700 border border-amber-200'
           }`}>
             {s}
           </Badge>
@@ -148,59 +143,73 @@ export default function AdminCandidatesPage() {
       }
     },
     {
+      accessorKey: "applications",
+      header: "Applications",
+      cell: ({ row }) => (
+        <div className="text-center">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/10 text-primary font-black text-xs">
+            {row.getValue("applications")}
+          </span>
+        </div>
+      ),
+    },
+    {
       accessorKey: "assigned_recruiter_name",
-      header: "Assigned Recruiter",
-      cell: ({ row }) => {
-        const recruiter = row.original.assigned_recruiter_name;
-        return (
-          <Select 
-            value={row.original.assigned_recruiter_id || "unassign"} 
-            onValueChange={(val) => handleAssignRecruiter(row.original.id as string, val)}
-          >
-            <SelectTrigger className="w-[140px] h-8 text-xs font-bold border-2">
-              <SelectValue placeholder="Assign..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="unassign" className="text-muted-foreground font-bold">Unassigned</SelectItem>
-              {employers.map(e => (
-                <SelectItem key={e.id} value={e.id} className="font-bold">{e.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
-      }
+      header: "Recruiter",
+      cell: ({ row }) => (
+        <Select
+          value={row.original.assigned_recruiter_id || "unassign"}
+          onValueChange={(val) => handleAssignRecruiter(row.original.id as string, val)}
+        >
+          <SelectTrigger className="w-[150px] h-8 text-xs font-bold border-2 rounded-lg">
+            <SelectValue placeholder="Assign..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="unassign" className="text-muted-foreground font-bold">Unassigned</SelectItem>
+            {employers.map(e => (
+              <SelectItem key={e.id} value={e.id} className="font-bold">{e.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )
     },
     {
       id: "resume",
       header: "Resume",
       cell: ({ row }) => {
-        if (!row.original.resume_url) return <span className="text-xs text-muted-foreground">None</span>;
+        if (!row.original.resume_url) return <span className="text-xs text-muted-foreground italic">None</span>;
         return (
-          <Button variant="outline" size="sm" onClick={() => handleDownloadResume(row.original.resume_url!, row.original.full_name)}>
-            <Download size={14} className="mr-1"/> Download
+          <Button variant="outline" size="sm" className="h-8 text-xs font-bold border-2 rounded-lg gap-1.5" onClick={() => handleDownloadResume(row.original.resume_url!, row.original.full_name)}>
+            <Download size={12} /> PDF
           </Button>
         );
       }
     },
     {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         return (
-          <div className="flex items-center justify-end gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50" onClick={() => handleStatusChange(row.original.id, 'shortlisted')} title="Shortlist">
-              <CheckCircle size={16} />
+          <div className="flex items-center gap-2">
+            <Link href={`/dashboard/admin/candidates/${row.original.id}`}>
+              <Button size="sm" className="h-8 px-3 text-xs font-bold bg-primary text-white rounded-lg shadow-sm hover:bg-primary/90 gap-1.5">
+                <Eye size={13} /> View
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg" onClick={() => handleStatusChange(row.original.id, 'shortlisted')} title="Shortlist">
+              <CheckCircle size={15} />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => handleStatusChange(row.original.id, 'rejected')} title="Reject">
-              <XCircle size={16} />
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg" onClick={() => handleStatusChange(row.original.id, 'rejected')} title="Reject">
+              <XCircle size={15} />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-muted" onClick={async () => {
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-red-50 hover:text-red-500 rounded-lg" onClick={async () => {
               if (confirm("Are you sure you want to delete this candidate?")) {
                 const res = await deleteUserAction(row.original.id);
                 if (res.success) toast.success("Candidate deleted");
                 else toast.error(res.error || "Failed to delete candidate");
               }
             }}>
-              <Trash2 size={16} />
+              <Trash2 size={15} />
             </Button>
           </div>
         );

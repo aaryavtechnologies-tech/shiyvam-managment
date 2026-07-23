@@ -38,9 +38,9 @@ export default async function CompanyDetailsPage(props: { params: Promise<{ id: 
       <Navbar />
 
       {/* HERO BANNER & HEADER */}
-      <div className="relative pt-20">
+      <div className="relative pt-32">
         {/* Cover Image/Gradient */}
-        <div className="absolute inset-0 top-20 h-64 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-b-2 border-border -z-10" />
+        <div className="absolute inset-0 top-32 h-64 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-b-2 border-border -z-10" />
         
         <div className="container mx-auto px-4 md:px-6 pt-24 pb-8">
           <div className="bg-white border-2 border-border rounded-[2.5rem] shadow-md p-8 md:p-12 relative -mt-12 animate-in fade-in slide-in-from-bottom-8 duration-700">

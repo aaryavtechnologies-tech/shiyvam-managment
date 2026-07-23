@@ -10,14 +10,15 @@ async function verifyAdmin() {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized");
 
-  const { data: userData } = await supabase
+  const supabaseAdmin = createAdminClient();
+  const { data: userData } = await supabaseAdmin
     .from("users")
     .select("role")
     .eq("id", user.id)
     .single();
 
   if (userData?.role !== "admin") throw new Error("Forbidden. Admin role required.");
-  return { user, supabaseAdmin: createAdminClient() };
+  return { user, supabaseAdmin };
 }
 
 export async function approveJobAction(jobId: string) {
@@ -75,6 +76,91 @@ export async function deleteJobAction(jobId: string) {
       .eq("id", jobId);
 
     if (error) throw error;
+    revalidatePath("/dashboard/admin/jobs");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function getAdminJobsAction() {
+  try {
+    const { supabaseAdmin } = await verifyAdmin();
+    const { data, error } = await supabaseAdmin
+      .from("jobs")
+      .select(`
+        *,
+        companies (name, logo_url, industry, verification_status),
+        applications (count)
+      `)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function adminCreateJobAction(formData: FormData) {
+  try {
+    const { supabaseAdmin, user } = await verifyAdmin();
+    
+    const companyName = formData.get("companyName") as string;
+    const industry = formData.get("industry") as string;
+
+    let { data: company, error: companyError } = await supabaseAdmin
+      .from("companies")
+      .select("id")
+      .eq("user_id", user.id)
+      .single();
+
+    let companyId = company?.id;
+
+    if (!companyId) {
+      const { data: newCompany, error: newCompanyError } = await supabaseAdmin
+        .from("companies")
+        .insert({
+          user_id: user.id,
+          name: companyName || "System Admin",
+          industry: industry || "Management",
+          verification_status: "verified"
+        })
+        .select("id")
+        .single();
+        
+      if (newCompanyError) throw newCompanyError;
+      companyId = newCompany.id;
+    }
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const requirements = formData.get("requirements") as string;
+    const minSalary = formData.get("minSalary") ? parseInt(formData.get("minSalary") as string) : null;
+    const maxSalary = formData.get("maxSalary") ? parseInt(formData.get("maxSalary") as string) : null;
+    const employmentType = formData.get("employmentType") as string;
+    const location = formData.get("location") as string;
+    const department = formData.get("department") as string;
+
+    const { error: jobError } = await supabaseAdmin
+      .from("jobs")
+      .insert({
+        employer_id: user.id,
+        company_id: companyId,
+        title,
+        description,
+        requirements,
+        min_salary: minSalary,
+        max_salary: maxSalary,
+        employment_type: employmentType,
+        location,
+        department,
+        status: "published",
+        admin_status: "approved"
+      });
+
+    if (jobError) throw jobError;
+
     revalidatePath("/dashboard/admin/jobs");
     return { success: true };
   } catch (error: any) {

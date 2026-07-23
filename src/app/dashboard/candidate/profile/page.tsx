@@ -19,7 +19,7 @@ export default async function CandidateProfilePage() {
     .single();
 
   return (
-    <div className="max-w-4xl mx-auto w-full pb-20">
+    <div className="max-w-4xl mx-auto w-full pt-10 pb-20">
       <div className="mb-8">
         <h1 className="font-heading text-4xl font-extrabold tracking-tight">Your Profile</h1>
         <p className="text-muted-foreground text-lg mt-2 font-medium">Complete your profile to increase your chances of landing your dream job.</p>

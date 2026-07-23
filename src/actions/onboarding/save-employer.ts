@@ -143,22 +143,26 @@ export async function uploadCompanyAssetAction(formData: FormData, assetType: 'l
   }
 
   try {
-    const supabaseAdmin = createAdminClient();
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(7)}.${fileExt}`;
-    const filePath = `${user.id}/${fileName}`;
-    const bucket = assetType === 'logo' ? 'company-logos' : 'company-assets';
+    
+    // We use a single local folder for all assets to simplify.
+    // E.g., public/uploads/company-assets/user_id/filename.ext
+    const fs = require('fs/promises');
+    const path = require('path');
+    
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'company-assets', user.id);
+    await fs.mkdir(uploadDir, { recursive: true });
+    
+    const filePath = path.join(uploadDir, fileName);
+    
+    // Read the file data and write to disk
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    await fs.writeFile(filePath, buffer);
 
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from(bucket)
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    // Get the public URL for the uploaded file
-    const { data: { publicUrl } } = supabaseAdmin.storage
-      .from(bucket)
-      .getPublicUrl(filePath);
+    // The public URL is just the relative path from the public directory
+    const publicUrl = `/uploads/company-assets/${user.id}/${fileName}`;
 
     // Save it to the company profile immediately
     const field = assetType === 'logo' ? 'logo_url' : 'cover_image_url';
