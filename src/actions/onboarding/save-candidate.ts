@@ -2,6 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import fs from "fs/promises";
+import path from "path";
 
 export async function saveCandidateProgress(data: any, step: number) {
   const supabase = await createClient();
@@ -102,9 +104,6 @@ export async function uploadCandidateResumeAction(formData: FormData) {
   try {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(7)}.${fileExt}`;
-    
-    const fs = require('fs/promises');
-    const path = require('path');
     
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'candidate-resumes', user.id);
     await fs.mkdir(uploadDir, { recursive: true });
