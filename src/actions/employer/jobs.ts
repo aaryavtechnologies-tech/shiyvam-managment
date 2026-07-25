@@ -22,6 +22,24 @@ export async function createJobAction(data: any) {
     .eq("employer_id", user.id)
     .single();
   
+  let salary_range_min = null;
+  let salary_range_max = null;
+  if (data.salary_range) {
+    const nums = data.salary_range.match(/\d+[kKmM]?/g);
+    if (nums && nums.length >= 1) {
+      const parseNum = (str: string) => {
+        let n = parseInt(str.replace(/[kKmM]/g, ''));
+        if (str.toLowerCase().includes('k')) n *= 1000;
+        if (str.toLowerCase().includes('m')) n *= 1000000;
+        return n;
+      };
+      salary_range_min = parseNum(nums[0]);
+      if (nums.length >= 2) {
+        salary_range_max = parseNum(nums[1]);
+      }
+    }
+  }
+
   const { error } = await supabaseAdmin
     .from("jobs")
     .insert({
@@ -31,10 +49,11 @@ export async function createJobAction(data: any) {
       department: data.department,
       employment_type: data.employment_type,
       location: data.location,
-      work_mode: data.work_mode,
+      is_remote: data.work_mode === "Remote",
       description: data.description,
       requirements: data.requirements,
-      salary_range: data.salary_range,
+      salary_range_min,
+      salary_range_max,
       status: 'Active'
     } as any);
 

@@ -59,7 +59,11 @@ export async function sendOTP(email: string, userId: string) {
       react: VerificationOTP({ validationCode: otp }) as React.ReactElement,
     });
 
-    if (resendError) throw resendError;
+    if (resendError) {
+      // Rollback the OTP insertion so the user isn't locked out by the cooldown
+      await supabase.from("email_verifications" as any).delete().eq("email", email).eq("verified", false);
+      throw resendError;
+    }
 
     return { success: true };
   } catch (err: any) {

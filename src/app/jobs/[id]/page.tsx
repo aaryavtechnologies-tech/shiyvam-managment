@@ -6,6 +6,7 @@ import Link from "next/link";
 import { MapPin, Briefcase, DollarSign, Clock, Building, CheckCircle2, ChevronRight, Share2, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ApplyModal } from "@/components/candidate/ApplyModal";
+import { SaveJobButton } from "@/components/candidate/SaveJobButton";
 import type { Database } from "@/types/database";
 
 type JobRow = Database["public"]["Tables"]["jobs"]["Row"];
@@ -102,10 +103,16 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                <Button variant="outline" className="h-14 px-6 rounded-2xl border-white text-white hover:bg-white hover:text-primary font-bold shadow-sm text-lg flex items-center gap-2">
-                  <Bookmark size={20} fill={isSaved ? "currentColor" : "none"} />
-                  {isSaved ? "Saved" : "Save Job"}
-                </Button>
+                {user ? (
+                  <SaveJobButton jobId={params.id} initialIsSaved={isSaved} />
+                ) : (
+                  <Button asChild variant="outline" className="h-14 px-6 rounded-2xl border-white text-white hover:bg-white hover:text-primary font-bold shadow-sm text-lg flex items-center gap-2 transition-all duration-300">
+                    <Link href="/login">
+                      <Bookmark size={20} fill="none" />
+                      Save Job
+                    </Link>
+                  </Button>
+                )}
                 {hasApplied ? (
                   <Button disabled className="h-14 px-8 rounded-2xl border border-border bg-green-500 text-white font-bold shadow-md text-lg flex items-center gap-2 opacity-100">
                     <CheckCircle2 size={24} />

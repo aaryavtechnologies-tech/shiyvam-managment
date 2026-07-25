@@ -40,6 +40,17 @@ export default async function CandidateDashboardOverview() {
     .order("applied_at", { ascending: false })
     .limit(3);
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Accepted": return "bg-green-100 text-green-700 border-green-300";
+      case "Rejected": return "bg-red-100 text-red-700 border-red-300";
+      case "Interviewing": return "bg-blue-100 text-blue-700 border-blue-300";
+      case "Shortlisted": return "bg-purple-100 text-purple-700 border-purple-300";
+      case "Withdrawn": return "bg-gray-200 text-gray-700 border-gray-400";
+      default: return "bg-amber-100 text-amber-700 border-amber-300"; // Applied
+    }
+  };
+
   return (
     <div className="space-y-8 pb-20">
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
@@ -55,32 +66,32 @@ export default async function CandidateDashboardOverview() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-[2rem] border-2 border-border shadow-md p-8 flex flex-col justify-between">
-          <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border-2 border-blue-200">
-            <Briefcase size={28} />
+        <div className="bg-white rounded-[2rem] border-2 border-border shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col justify-between group">
+          <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border-2 border-blue-200 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm">
+            <Briefcase size={32} />
           </div>
           <div>
-            <h3 className="font-bold text-muted-foreground mb-1">Total Applications</h3>
+            <h3 className="font-bold text-muted-foreground mb-1 text-lg">Total Applications</h3>
             <p className="font-heading text-5xl font-extrabold">{applicationsCount}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-[2rem] border-2 border-border shadow-md p-8 flex flex-col justify-between">
-          <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border-2 border-amber-200">
-            <Bookmark size={28} />
+        <div className="bg-white rounded-[2rem] border-2 border-border shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col justify-between group">
+          <div className="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border-2 border-amber-200 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-sm">
+            <Bookmark size={32} />
           </div>
           <div>
-            <h3 className="font-bold text-muted-foreground mb-1">Saved Jobs</h3>
+            <h3 className="font-bold text-muted-foreground mb-1 text-lg">Saved Jobs</h3>
             <p className="font-heading text-5xl font-extrabold">{savedJobsCount}</p>
           </div>
         </div>
 
-        <div className="bg-primary text-primary-foreground rounded-[2rem] border border-border shadow-md p-8 flex flex-col justify-between relative overflow-hidden">
-          <div className="absolute -right-10 -bottom-10 opacity-10">
+        <div className="bg-primary text-primary-foreground rounded-[2rem] border-2 border-primary shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
             <FileText size={160} />
           </div>
-          <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-6 relative z-10 border-2 border-white/20">
-            <FileText size={28} />
+          <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 relative z-10 border-2 border-white/20 backdrop-blur-md group-hover:bg-white/20 transition-colors duration-300">
+            <FileText size={32} />
           </div>
           <div className="relative z-10">
             <div className="flex justify-between items-end mb-2">
@@ -110,29 +121,35 @@ export default async function CandidateDashboardOverview() {
         {recentApps && recentApps.length > 0 ? (
           <div className="space-y-4">
             {recentApps.map((app: any) => (
-              <div key={app.id} className="flex items-center justify-between p-4 rounded-2xl border-2 border-border hover:border-primary transition-colors group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-muted border-2 border-border overflow-hidden flex-shrink-0">
-                     {app.jobs?.companies?.logo_url ? (
+              <Link href={`/dashboard/candidate/applications`} key={app.id} className="block">
+                <div className="flex items-center justify-between p-5 rounded-2xl border-2 border-border hover:border-primary hover:shadow-[4px_4px_0_0_rgba(11,27,61,1)] hover:-translate-y-1 bg-white transition-all duration-300 group">
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 rounded-xl bg-muted border-2 border-border overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                       {app.jobs?.companies?.logo_url ? (
                         <img src={app.jobs.companies.logo_url} alt={app.jobs.companies.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center font-bold text-muted-foreground">
                           {app.jobs?.companies?.name?.charAt(0) || "C"}
                         </div>
                       )}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xl group-hover:text-primary transition-colors mb-1">{app.jobs?.title}</h4>
+                      <p className="text-sm font-bold text-muted-foreground flex items-center gap-1">
+                        {app.jobs?.companies?.name}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{app.jobs?.title}</h4>
-                    <p className="text-sm font-semibold text-muted-foreground">{app.jobs?.companies?.name}</p>
+                  <div className="text-right flex flex-col items-end gap-2">
+                    <div className={`inline-block px-4 py-1.5 rounded-full font-bold text-sm shadow-sm border-2 ${getStatusColor(app.status)}`}>
+                      {app.status}
+                    </div>
+                    <p className="text-xs font-bold text-muted-foreground flex items-center gap-1 opacity-70">
+                      Applied {new Date(app.applied_at).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="inline-block px-3 py-1 rounded-lg bg-secondary text-white font-bold text-sm shadow-sm border-2 border-border mb-1">
-                    {app.status}
-                  </div>
-                  <p className="text-xs font-bold text-muted-foreground">{new Date(app.applied_at).toLocaleDateString()}</p>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         ) : (

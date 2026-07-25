@@ -20,7 +20,7 @@ export function BasicInfoStep({ form }: { form: UseFormReturn<CandidateProfileIn
           <FormItem>
             <FormLabel className="font-bold">Professional Headline *</FormLabel>
             <FormControl>
-              <>
+              <div>
                 <Input 
                   placeholder="e.g. Senior Frontend Engineer | React Specialist" 
                   className="h-12 border-2 rounded-xl focus-visible:ring-primary focus-visible:border-primary shadow-sm"
@@ -32,7 +32,7 @@ export function BasicInfoStep({ form }: { form: UseFormReturn<CandidateProfileIn
                     <option key={headline} value={headline} />
                   ))}
                 </datalist>
-              </>
+              </div>
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -103,7 +103,7 @@ export function BasicInfoStep({ form }: { form: UseFormReturn<CandidateProfileIn
             <FormItem>
               <FormLabel className="font-bold">City *</FormLabel>
               <FormControl>
-                <>
+                <div>
                   <Input 
                     placeholder="San Francisco" 
                     className="h-12 border-2 rounded-xl shadow-sm focus-visible:ring-primary"
@@ -115,7 +115,7 @@ export function BasicInfoStep({ form }: { form: UseFormReturn<CandidateProfileIn
                       <option key={city} value={city} />
                     ))}
                   </datalist>
-                </>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

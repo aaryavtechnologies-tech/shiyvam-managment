@@ -24,7 +24,7 @@ export type JobAdmin = {
 export default function AdminJobsPage() {
   const [data, setData] = useState<JobAdmin[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("pending");
+  const [activeTab, setActiveTab] = useState("approved");
 
   async function fetchData() {
     setLoading(true);
@@ -178,7 +178,7 @@ export default function AdminJobsPage() {
       </div>
       </div>
 
-      <Tabs defaultValue="pending" value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs defaultValue="approved" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4 max-w-2xl bg-white border-2 border-border shadow-sm rounded-xl h-12 p-1">
           <TabsTrigger value="pending" className="rounded-lg font-bold">Pending</TabsTrigger>
           <TabsTrigger value="approved" className="rounded-lg font-bold">Approved</TabsTrigger>

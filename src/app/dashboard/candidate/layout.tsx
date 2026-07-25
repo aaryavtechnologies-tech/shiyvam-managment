@@ -58,8 +58,8 @@ export default async function CandidateDashboardLayout({
     <div className="min-h-screen bg-muted/20 flex flex-col">
       <Navbar />
 
-      {/* Add pt-24 (padding top) to push content below the fixed Navbar */}
-      <div className="flex-1 container mx-auto px-4 md:px-6 py-8 pt-24 flex flex-col md:flex-row gap-8">
+      {/* Add pt-32 to safely clear the fixed Navbar height */}
+      <div className="flex-1 container mx-auto px-4 md:px-6 pt-32 pb-12 flex flex-col md:flex-row gap-8">
         <aside className="w-full md:w-64 flex-shrink-0">
           <Sidebar items={navItems} userName={profile?.full_name || "Candidate"} />
         </aside>

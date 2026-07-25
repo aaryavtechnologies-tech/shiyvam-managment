@@ -64,7 +64,7 @@ export default async function EmployerDashboardLayout({
     <div className="min-h-screen bg-[#F7F7F9] text-foreground font-sans selection:bg-secondary/30 selection:text-secondary-foreground">
       <TopNav userEmail={user.email || ""} />
       
-      <div className="max-w-[1600px] mx-auto p-6 md:p-8 flex gap-8 relative items-start">
+      <div className="max-w-[1600px] mx-auto p-6 pt-12 md:p-8 md:pt-16 flex gap-8 relative items-start">
         <aside className="w-64 hidden lg:block flex-shrink-0">
           <Sidebar items={sidebarItems} companyName={company?.name || "Company"} />
         </aside>

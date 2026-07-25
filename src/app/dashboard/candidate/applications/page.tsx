@@ -121,19 +121,19 @@ export default async function CandidateApplicationsPage() {
                       <StatusTimeline currentStatus={app.status} />
                     </div>
                     
-                    <div className="flex gap-2 w-full md:w-auto">
+                    <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
                       {app.resume_url && (
-                        <Button variant="outline" size="sm" asChild className="rounded-lg border-2 shadow-sm flex-1 md:flex-none">
-                          <a href={app.resume_url} target="_blank" rel="noreferrer" title="View Resume">
-                            <Download size={16} />
-                          </a>
-                        </Button>
+                        <a href={app.resume_url} target="_blank" rel="noreferrer" title="View Resume" className="flex-none">
+                          <Button variant="outline" className="h-12 w-12 p-0 rounded-xl border-2 border-border shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-primary transition-all duration-300 group">
+                            <Download size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                          </Button>
+                        </a>
                       )}
-                      <Button variant="outline" size="sm" asChild className="rounded-lg border-2 shadow-sm flex-1 md:flex-none hover:bg-primary hover:text-primary-foreground">
-                        <Link href={`/jobs/${app.jobs?.id}`}>
-                          Details <ChevronRight size={16} className="ml-1" />
-                        </Link>
-                      </Button>
+                      <Link href={`/jobs/${app.jobs?.id}`} className="flex-1 md:flex-none">
+                        <Button className="w-full h-12 px-6 rounded-xl border-2 border-primary bg-primary text-primary-foreground font-bold shadow-[0_4px_0_0_rgba(11,27,61,1)] hover:shadow-[0_6px_0_0_rgba(11,27,61,1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+                          View Details <ChevronRight size={18} className="ml-2" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default async function CandidateApplicationsPage() {
               <p className="text-muted-foreground font-medium text-lg mb-8 max-w-md mx-auto">
                 You haven't applied to any jobs yet. Start your job search today and land your dream role!
               </p>
-              <Button asChild className="h-14 px-8 rounded-xl font-bold shadow-sm text-lg">
+              <Button asChild className="h-14 px-10 rounded-xl border-2 border-primary bg-primary text-primary-foreground font-bold shadow-[0_4px_14px_0_rgba(11,27,61,0.39)] hover:shadow-[0_6px_20px_rgba(11,27,61,0.23)] hover:-translate-y-1 transition-all duration-300 text-lg">
                 <Link href="/jobs">Browse Jobs Now</Link>
               </Button>
             </div>
