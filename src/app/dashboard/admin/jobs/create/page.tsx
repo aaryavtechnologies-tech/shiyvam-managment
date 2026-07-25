@@ -48,7 +48,7 @@ export default function AdminCreateJobPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        
+
         {/* Company Details */}
         <Card className="p-6 border-2 border-border shadow-md rounded-2xl bg-white">
           <h2 className="text-lg font-black font-heading mb-4 flex items-center gap-2">
@@ -63,6 +63,14 @@ export default function AdminCreateJobPage() {
               <label className="text-sm font-semibold text-gray-700">Industry</label>
               <Input name="industry" placeholder="e.g. Technology" className="bg-gray-50 h-11 border-gray-200" />
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700">Company Logo Upload (Optional)</label>
+              <Input type="file" name="logoFile" accept="image/*" className="bg-gray-50 h-11 border-gray-200 cursor-pointer pt-2" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700">Or Logo Image URL (Optional)</label>
+              <Input type="url" name="logoUrl" placeholder="https://example.com/logo.png" className="bg-gray-50 h-11 border-gray-200" />
+            </div>
           </div>
         </Card>
 
@@ -71,7 +79,7 @@ export default function AdminCreateJobPage() {
           <h2 className="text-lg font-black font-heading mb-4 flex items-center gap-2">
             <Briefcase className="text-primary" /> Job Details
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-2 md:col-span-2">
               <label className="text-sm font-semibold text-gray-700">Job Title <span className="text-red-500">*</span></label>

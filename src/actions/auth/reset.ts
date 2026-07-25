@@ -148,6 +148,7 @@ export const verifyAndResetPasswordAction = actionClient
       // Log the action
       await logAuditAction({
         action: "update",
+        admin_id: record.user_id,
         target_id: record.user_id,
         target_type: "user",
         new_data: { event: "password_reset" }

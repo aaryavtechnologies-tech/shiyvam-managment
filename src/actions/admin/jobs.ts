@@ -108,14 +108,40 @@ export async function adminCreateJobAction(formData: FormData) {
     
     const companyName = formData.get("companyName") as string;
     const industry = formData.get("industry") as string;
+    const logoUrlInput = formData.get("logoUrl") as string;
+    const logoFile = formData.get("logoFile") as File | null;
 
-    let { data: company, error: companyError } = await supabaseAdmin
+    let finalLogoUrl = logoUrlInput || null;
+
+    if (logoFile && logoFile.size > 0) {
+      // Ensure bucket exists (ignore error if it already does)
+      await supabaseAdmin.storage.createBucket("company-logos", { public: true }).catch(() => {});
+      
+      const fileExt = logoFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("company-logos")
+        .upload(fileName, logoFile);
+        
+      if (uploadError) throw uploadError;
+      
+      const { data: publicUrlData } = supabaseAdmin.storage
+        .from("company-logos")
+        .getPublicUrl(fileName);
+        
+      finalLogoUrl = publicUrlData.publicUrl;
+    }
+
+    // Look for a company with the exact name so admins can create jobs for different companies
+    let { data: existingCompany } = await supabaseAdmin
       .from("companies")
-      .select("id")
-      .eq("employer_id", user.id)
-      .single();
+      .select("id, logo_url")
+      .eq("name", companyName)
+      .limit(1)
+      .maybeSingle();
 
-    let companyId = company?.id;
+    let companyId = existingCompany?.id;
 
     if (!companyId) {
       const { data: newCompany, error: newCompanyError } = await supabaseAdmin
@@ -124,6 +150,7 @@ export async function adminCreateJobAction(formData: FormData) {
           employer_id: user.id,
           name: companyName || "System Admin",
           industry: industry || "Management",
+          logo_url: finalLogoUrl,
           verification_status: "verified"
         } as any)
         .select("id")
@@ -131,6 +158,11 @@ export async function adminCreateJobAction(formData: FormData) {
         
       if (newCompanyError) throw newCompanyError;
       companyId = newCompany.id;
+    } else {
+      // If company exists, update logo if a new one was provided
+      if (finalLogoUrl && finalLogoUrl !== existingCompany?.logo_url) {
+        await supabaseAdmin.from("companies").update({ logo_url: finalLogoUrl }).eq("id", companyId);
+      }
     }
 
     const title = formData.get("title") as string;
