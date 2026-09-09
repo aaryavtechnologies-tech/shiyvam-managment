@@ -71,7 +71,8 @@ export const signInAction = actionClient
       throw new AuthError("Invalid email or password", error.code);
     }
 
-    const { data: rawProfile } = await supabase
+    const adminSupabase = createAdminClient();
+    const { data: rawProfile } = await adminSupabase
       .from("users")
       .select("role, onboarding_completed")
       .eq("id", data.user.id)
